@@ -220,32 +220,94 @@ export const SHOTS: Shot[] = [
 ];
 
 /**
- * A SEQUÊNCIA DO HERÓI (scroll).
+ * AS SEQUÊNCIAS DO DIA (scroll).
  *
- * O herói da homepage faz scrub de uma sequência de fotogramas conforme o
- * scroll: um dolly-out lento que começa num detalhe das árvores de discos e
- * acaba no plano largo do pavilhão. O plano largo é também o poster (o que o
- * SSR pinta primeiro, e o que vê quem tem reduced-motion ou um ecrã pequeno).
+ * A homepage é uma jornada de capítulos: secções pinadas que fazem scrub de
+ * uma sequência de fotogramas conforme o scroll, a contar um dia de treino
+ * das 05:30 às 23:00. O último fotograma de cada capítulo é também o poster
+ * (o que o SSR pinta primeiro, e o que vê quem tem reduced-motion ou um ecrã
+ * pequeno).
  *
- * GERADA POR COMPUTADOR, E NÃO É O PAVILHÃO. Vale a mesma regra das fotos de
- * banco: `stock: true` põe a etiqueta "Imagem provisória" no ecrã, o alt
- * di-lo a quem ouve o site, e a sequência sai no dia em que houver filmagem
- * real da casa. O pipeline para a refazer (fotogramas → vídeo → sequência)
- * está documentado na skill `scroll-video-animation`.
+ * GERADAS POR COMPUTADOR, E NÃO SÃO O PAVILHÃO. Vale a mesma regra das fotos
+ * de banco: `stock: true` põe a etiqueta "Imagem provisória" no ecrã, o alt
+ * di-lo a quem ouve o site, e cada sequência sai no dia em que houver
+ * filmagem real da casa. O pipeline para as refazer (fotogramas → vídeo →
+ * sequência) está documentado na skill `scroll-video-animation`.
  *
- * `frameCount: 0` desliga a sequência por completo: o herói volta à
- * fotografia de `hero` (ou à chapa desenhada), como estava antes.
+ * `frameCount: 0` desliga um capítulo por completo: a homepage salta-o e
+ * nada mais muda. No herói, desligar devolve o herói fotográfico antigo.
  */
-export const HERO_SEQUENCE = {
-  base: "/media/sequences/hero",
-  frameCount: 61,
-  scrollLength: 2.5,
-  stock: true,
-  alt: {
-    pt: "Sala de máquinas escura de um pavilhão industrial, árvores de discos e máquinas de carga em primeiro plano, uma luz quente ao fundo",
-    en: "A dark machine floor in an industrial hall, plate trees and plate-loaded machines up close, one warm light in the distance",
-  } as L,
-};
+export interface SequenceShot {
+  slot: string;
+  base: string;
+  /** 0 = capítulo desligado. Tem de ser igual ao nº real de ficheiros frame-*. */
+  frameCount: number;
+  /** Altura da secção em viewports de scroll. */
+  scrollLength: number;
+  stock: boolean;
+  alt: L;
+}
+
+export const SEQUENCES: SequenceShot[] = [
+  {
+    slot: "hero",
+    base: "/media/sequences/hero",
+    frameCount: 61,
+    scrollLength: 2.5,
+    stock: true,
+    alt: {
+      pt: "Sala de máquinas escura de um pavilhão industrial, árvores de discos e máquinas de carga em primeiro plano, uma luz quente ao fundo",
+      en: "A dark machine floor in an industrial hall, plate trees and plate-loaded machines up close, one warm light in the distance",
+    },
+  },
+  {
+    slot: "luz",
+    base: "/media/sequences/luz",
+    frameCount: 0,
+    scrollLength: 2,
+    stock: true,
+    alt: {
+      pt: "Luz da manhã a atravessar o chão escuro de um pavilhão de treino",
+      en: "Morning light crossing the dark floor of a training hall",
+    },
+  },
+  {
+    slot: "mecanismo",
+    base: "/media/sequences/mecanismo",
+    frameCount: 0,
+    scrollLength: 3,
+    stock: true,
+    alt: {
+      pt: "Mecanismo de carga antigo em ferro, com discos e alavancas, a separar-se em peças no escuro",
+      en: "A vintage iron loading mechanism, plates and levers, coming apart into its pieces in the dark",
+    },
+  },
+  {
+    slot: "cheio",
+    base: "/media/sequences/cheio",
+    frameCount: 0,
+    scrollLength: 2,
+    stock: true,
+    alt: {
+      pt: "Barra carregada sob luz quente ao fim do dia, pó de magnésio no ar",
+      en: "A loaded bar under warm evening light, chalk dust in the air",
+    },
+  },
+  {
+    slot: "fecho",
+    base: "/media/sequences/fecho",
+    frameCount: 0,
+    scrollLength: 2,
+    stock: true,
+    alt: {
+      pt: "O pavilhão às escuras, a última luz a apagar-se",
+      en: "The hall in darkness, the last light going out",
+    },
+  },
+];
+
+export const sequence = (slot: string): SequenceShot | undefined =>
+  SEQUENCES.find((s) => s.slot === slot);
 
 export const shot = (slot: string): Shot | undefined => SHOTS.find((s) => s.slot === slot);
 

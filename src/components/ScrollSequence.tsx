@@ -28,6 +28,9 @@ interface Props {
   posterAlt: string;
   /** true no herói: o poster é o LCP da página. */
   priority?: boolean;
+  /** true nos capítulos abaixo da dobra: os fotogramas só descarregam quando
+      a secção está a menos de um viewport de distância. */
+  lazy?: boolean;
   /** Conteúdo por cima (título, CTA). */
   children?: ReactNode;
   className?: string;
@@ -42,6 +45,7 @@ export default function ScrollSequence({
   minWidth = 768,
   posterAlt,
   priority = false,
+  lazy = false,
   children,
   className = "",
 }: Props) {
@@ -51,6 +55,8 @@ export default function ScrollSequence({
   // e o primeiro paint mostram apenas o poster, e quem tem reduced-motion ou
   // um ecrã pequeno nunca descarrega fotograma nenhum.
   const [active, setActive] = useState(false);
+  // Capítulos lazy só descarregam quando estão a menos de um viewport.
+  const [near, setNear] = useState(!lazy);
 
   useEffect(() => {
     const reduced = window.matchMedia("(prefers-reduced-motion: reduce)");
@@ -66,7 +72,19 @@ export default function ScrollSequence({
   }, [minWidth]);
 
   useEffect(() => {
-    if (!active) return;
+    if (!lazy || near) return;
+    const el = sectionRef.current;
+    if (!el) return;
+    const io = new IntersectionObserver(
+      (entries) => entries.some((e) => e.isIntersecting) && setNear(true),
+      { rootMargin: "100% 0px" },
+    );
+    io.observe(el);
+    return () => io.disconnect();
+  }, [lazy, near]);
+
+  useEffect(() => {
+    if (!active || !near) return;
     const canvas = canvasRef.current;
     const section = sectionRef.current;
     if (!canvas || !section) return;
@@ -164,7 +182,7 @@ export default function ScrollSequence({
       window.removeEventListener("scroll", onScroll);
       window.removeEventListener("resize", onScroll);
     };
-  }, [active, base, frameCount]);
+  }, [active, near, base, frameCount]);
 
   return (
     <section

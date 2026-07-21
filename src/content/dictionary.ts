@@ -58,6 +58,50 @@ export const DICT = {
     heroCtaGym: { pt: "Ver o ginásio", en: "See the gym" },
     heroCtaIron: { pt: "Ver o registo", en: "See the record" },
 
+    /* OS CAPÍTULOS DO DIA. A homepage conta um dia de treino, das 05:30 às
+       23:00, em capítulos de scroll. As horas dos kickers são a espinha da
+       narrativa (a mesma do relógio fixo), não um horário publicado: o
+       horário verdadeiro continua a viver em site.ts e no rodapé. */
+    journey: {
+      luz: {
+        kicker: { pt: "07:00", en: "07:00" },
+        line: {
+          pt: "A luz chega primeiro que as pessoas. O ferro já cá estava.",
+          en: "The light arrives before the people. The iron was already here.",
+        },
+      },
+      mecanismo: {
+        kicker: { pt: "O mecanismo", en: "The mechanism" },
+        line: {
+          pt: "Pivô, alavanca, disco. Construído quando construir era para durar.",
+          en: "Pivot, lever, plate. Built when building meant lasting.",
+        },
+      },
+      cheio: {
+        kicker: { pt: "18:30", en: "18:30" },
+        line: {
+          pt: "A hora em que a sala trabalha. Magnésio no ar, ferro no chão.",
+          en: "The hour the floor works. Chalk in the air, iron on the ground.",
+        },
+      },
+      fecho: {
+        kicker: { pt: "23:00", en: "23:00" },
+        line: {
+          pt: "A última luz apaga-se. Amanhã recomeça às 05:30.",
+          en: "The last light goes out. Tomorrow begins again at 05:30.",
+        },
+      },
+    },
+
+    /* A ficha técnica: o registo tratado como documento de engenharia. */
+    blueprint: {
+      kicker: { pt: "Ficha do registo", en: "Registry sheet" },
+      maker: { pt: "Fabricante", en: "Maker" },
+      model: { pt: "Modelo", en: "Model" },
+      era: { pt: "Era", en: "Era" },
+      source: { pt: "Fonte", en: "Source" },
+    },
+
     /* A tese. Substitui o bloco "duas metades" do esqueleto original: o Mythical
        é uma coisa só, e diluí-lo em duas colunas era enfraquecê-lo. */
     thesisKicker: { pt: "Porque é que isto importa", en: "Why this matters" },

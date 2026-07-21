@@ -1,13 +1,16 @@
 import Link from "next/link";
 import Image from "next/image";
 import type { Metadata } from "next";
+import type { ReactNode } from "react";
 import { Button, Reveal } from "@/components/ui";
 import { Shot, ProvisionalTag } from "@/components/Shot";
 import { Plate } from "@/components/Wordmark";
 import { DICT, fill } from "@/content/dictionary";
 import { SITE, type Locale } from "@/content/site";
-import { shot, isStock, HERO_SEQUENCE } from "@/content/media";
+import { shot, isStock, sequence } from "@/content/media";
 import ScrollSequence from "@/components/ScrollSequence";
+import DayClock from "@/components/DayClock";
+import Blueprint from "@/components/Blueprint";
 import { publicClaims, showClaimsBar } from "@/content/registry";
 import { brands, showBrands, CAMPAIGN, campaignLive } from "@/content/gym";
 import { confirmedMachines } from "@/content/machines";
@@ -45,7 +48,8 @@ export default async function HomePage({
   const makers = brands();
   const products = featuredProducts();
   const heroPhoto = shot("hero")?.src;
-  const heroSequence = HERO_SEQUENCE.frameCount > 0;
+  const heroSeq = sequence("hero")!;
+  const heroSequence = heroSeq.frameCount > 0;
 
   /* Os véus do herói, partilhados pelos dois heróis possíveis (sequência e
      fotografia). A calibração está comentada mais abaixo, junto ao herói
@@ -101,21 +105,70 @@ export default async function HomePage({
     </div>
   );
 
+  /* UM CAPÍTULO DO DIA: secção pinada que faz scrub da sua sequência. Se a
+     sequência estiver desligada (frameCount 0), o capítulo não existe e a
+     página flui como antes: os capítulos são cinema por cima do conteúdo,
+     nunca o contrário. */
+  const chapter = (
+    slot: string,
+    cap: { kicker: Record<Locale, string>; line: Record<Locale, string> },
+    opts: { id?: string; children?: ReactNode } = {},
+  ) => {
+    const s = sequence(slot);
+    if (!s || s.frameCount === 0) return null;
+    return (
+      <div id={opts.id}>
+        <ScrollSequence
+          base={s.base}
+          frameCount={s.frameCount}
+          scrollLength={s.scrollLength}
+          posterAlt={`${s.alt[l]}. ${DICT.common.provisionalAlt[l]}`}
+          lazy
+          className="isolate bg-carbon"
+        >
+          <div aria-hidden className="grain absolute inset-0" />
+          {/* Um véu só: os capítulos têm menos texto que o herói, e o texto
+              vive no fundo do ecrã. */}
+          <div
+            aria-hidden
+            className="absolute inset-x-0 bottom-0 z-1 h-[55%] bg-gradient-to-t from-carbon from-8% via-carbon/60 via-50% to-transparent"
+          />
+          <div className="flex h-full items-end">
+            <div className="relative z-2 mx-auto w-full max-w-[92rem] px-5 pb-16 sm:px-8 sm:pb-24">
+              <p className="t-data text-oxide">{cap.kicker[l]}</p>
+              <p className="t-display mt-4 max-w-[24ch] text-[clamp(1.75rem,4.5vw,3.5rem)] text-white">
+                {cap.line[l]}
+              </p>
+              {opts.children}
+            </div>
+          </div>
+          {s.stock && (
+            <ProvisionalTag locale={l} position="bottom-right" className="z-3" />
+          )}
+        </ScrollSequence>
+      </div>
+    );
+  };
+
   return (
     <>
+      {/* O relógio do dia: fixo, percorre 05:30→23:00 até ao fim do último
+          capítulo. Só na homepage, que é onde o dia se conta. */}
+      <DayClock endId="fecho" />
+
       {heroSequence ? (
         /* ------------------------------------------------------------- HERO
            COM SEQUÊNCIA DE SCROLL. O scroll faz scrub de um dolly-out: começa
            num detalhe das árvores de discos e recua até ao plano largo do
            pavilhão — o detalhe revela-se parte de um plano maior. A sequência
            é gerada por computador e leva a etiqueta de provisório como
-           qualquer imagem de banco; ver HERO_SEQUENCE em content/media.ts,
+           qualquer imagem de banco; ver SEQUENCES em content/media.ts,
            e a skill scroll-video-animation para o pipeline. */
         <ScrollSequence
-          base={HERO_SEQUENCE.base}
-          frameCount={HERO_SEQUENCE.frameCount}
-          scrollLength={HERO_SEQUENCE.scrollLength}
-          posterAlt={`${HERO_SEQUENCE.alt[l]}. ${DICT.common.provisionalAlt[l]}`}
+          base={heroSeq.base}
+          frameCount={heroSeq.frameCount}
+          scrollLength={heroSeq.scrollLength}
+          posterAlt={`${heroSeq.alt[l]}. ${DICT.common.provisionalAlt[l]}`}
           priority
           className="isolate bg-carbon"
         >
@@ -124,7 +177,7 @@ export default async function HomePage({
           <div aria-hidden className="grain absolute inset-0" />
           {heroVeils}
           <div className="flex h-full items-end">{heroText}</div>
-          {HERO_SEQUENCE.stock && (
+          {heroSeq.stock && (
             <ProvisionalTag locale={l} position="bottom-right" className="z-3" />
           )}
         </ScrollSequence>
@@ -200,6 +253,9 @@ export default async function HomePage({
       </section>
       )}
 
+      {/* ------------------------------------------------- CAPÍTULO: 07:00 */}
+      {chapter("luz", c.journey.luz)}
+
       {/* ------------------------------------------------------ BARRA DE NÚMEROS
           Só aparece com três ou mais factos verificados. Hoje há um, portanto
           não aparece. Uma barra de estatísticas com um número parece um erro de
@@ -269,6 +325,12 @@ export default async function HomePage({
           </div>
         </div>
       </section>
+
+      {/* ------------------------------------------- CAPÍTULO: O MECANISMO */}
+      {chapter("mecanismo", c.journey.mecanismo)}
+
+      {/* A ficha técnica: do cinema para o documento. */}
+      <Blueprint locale={l} />
 
       {/* -------------------------------------------------- O REGISTO DO FERRO
           A banda de papel. É a única secção clara do site, e é de propósito:
@@ -377,6 +439,9 @@ export default async function HomePage({
           </div>
         </section>
       )}
+
+      {/* ------------------------------------------------- CAPÍTULO: 18:30 */}
+      {chapter("cheio", c.journey.cheio)}
 
       {/* -------------------------------------------------------- LOJA EM DESTAQUE */}
       {products.length > 0 && (
@@ -522,6 +587,18 @@ export default async function HomePage({
 
         {isStock("visit") && <ProvisionalTag locale={l} position="bottom-right" className="z-3" />}
       </section>
+
+      {/* ------------------------------------------------- CAPÍTULO: 23:00
+          O dia fecha e o convite fica: o gesto final da narrativa é o mesmo
+          botão de adesão que já existe em Visitar. */}
+      {chapter("fecho", c.journey.fecho, {
+        id: "fecho",
+        children: (
+          <div className="mt-10">
+            <Button href={`/${l}/contactos#aderir`}>{DICT.nav.join[l]}</Button>
+          </div>
+        ),
+      })}
     </>
   );
 }
