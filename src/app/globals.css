@@ -1,0 +1,304 @@
+@import "tailwindcss";
+
+/* ============================================================================
+   MYTHICAL GYM: sistema visual
+   ---------------------------------------------------------------------------
+   A DIREÇÃO, em duas linhas: um armazém com ferro da era dourada. Carvão quente
+   e latão. Nada de branco clínico, nada de vermelho de ginásio.
+
+   PORQUÊ ESCURO. Em Pombal, o Pulse, o MoveUP, o Fitness Factory e o Wefit são
+   todos claros, azuis e verdes, com fotografia de gente a sorrir. Um site
+   escuro e quente não é uma preferência estética aqui: é a única forma de não
+   ser confundido com eles ao segundo de scroll. E é a luz que o espaço tem de
+   verdade, que é a de um pavilhão industrial, não a de um health club.
+
+   PORQUÊ LATÃO. É a cor do metal das placas de fabricante gastas, e é o único
+   acento que uma sala de ferro justifica. Vermelho seria genérico; o latão é
+   semântico, e usa-se com conta: acento, número, estado ativo. Nunca decoração.
+
+   NOTA PARA QUEM MEXER NISTO A SEGUIR: os nomes dos tokens vêm do esqueleto
+   anterior e ficaram de propósito, para não haver uma migração de centenas de
+   classes só por causa de nomes. O que mudou foram os VALORES, e com eles os
+   papéis: `void` era a página clara e agora é a página escura, `chalk` era
+   texto escuro e agora é texto claro. A relação texto/fundo mantém-se válida em
+   todos os pares. `paper` continua a ser a banda de pontuação, mas agora é ela
+   a clara, e é o inverso do que era.
+
+   Todos os pares texto/fundo foram verificados a 4.5:1 (WCAG AA) POR CÁLCULO,
+   não a olho. Os rácios estão anotados em cada linha.
+   ========================================================================== */
+
+@theme {
+  /* --- superfícies escuras: a página --- */
+  --color-void: #121110; /* carvão quente. o fundo de tudo. */
+  --color-iron: #1a1816;
+  --color-iron-2: #232019;
+  --color-iron-3: #2b2721;
+  --color-hairline: #33302b;
+  --color-hairline-soft: #26231f;
+  /* BORDA DE COMPONENTE INTERATIVO, e é outra coisa da linha decorativa acima.
+     A WCAG 1.4.11 pede 3:1 para o limite de um controlo, porque é o limite que
+     diz onde o botão começa e acaba. O `hairline` dá 1,44:1 sobre a página:
+     serve para separar secções, não para desenhar um botão. Medido: 3,56:1
+     sobre `void`, 3,34:1 sobre `iron`, 3,07:1 sobre `iron-2`. */
+  --color-hairline-strong: #6f6b64;
+
+  /* --- texto sobre o escuro (contraste sobre #121110) --- */
+  --color-chalk: #f3ede1; /* 16.18:1  principal */
+  --color-chalk-dim: #cfc7b8; /* 11.24:1 */
+  --color-steel: #9c9488; /*  6.29:1  secundário */
+  --color-steel-dim: #8e8679; /*  5.24:1 sobre void, 4.52:1 sobre iron-2.
+                                 É o cinzento mais escuro que ainda passa AA na
+                                 mais clara das bandas escuras. Não escurecer. */
+
+  /* --- carbono: mais fundo que a página. herói e chapas de etiqueta. --- */
+  --color-carbon: #0c0b0a;
+  --color-carbon-2: #141210;
+
+  /* --- a banda de papel: agora é ela a pontuação clara --- */
+  --color-paper: #ece4d5;
+  --color-paper-2: #e0d6c3;
+  --color-paper-line: #c9bda6;
+  /* O mesmo, do lado claro: 3,46:1 sobre o papel. */
+  --color-paper-line-strong: #807867;
+  --color-ink: #17150f; /* 14.45:1 sobre o papel */
+  --color-ink-dim: #56503f; /*  6.36:1 */
+
+  /* --- latão: o acento da marca --- */
+  --color-oxide: #d9a441; /* 8.39:1 sobre void. Passa como TEXTO PEQUENO, o que
+                             é raro num acento quente e é o que permite usá-lo em
+                             rótulos e não só em títulos. */
+  --color-oxide-solid: #d9a441; /* chapa de botão. O texto por cima é ESCURO
+                                   (text-carbon), nunca branco: branco sobre
+                                   latão dá 1.8:1 e é ilegível. */
+  --color-oxide-bright: #e8bc63; /* 10.60:1. Para quando o latão assenta sobre a
+                                    banda mais clara dos escuros. */
+  --color-oxide-dim: #eabf6a; /* HOVER do botão sólido. Sobe de tom em vez de
+                                 descer, de propósito: o texto do botão é escuro,
+                                 portanto clarear aumenta o contraste. Escurecer
+                                 fá-lo-ia cair abaixo de AA. */
+  --color-oxide-deep: #795712; /* 5.22:1 sobre papel. O latão só se lê sobre a
+                                  banda clara nesta versão escura. */
+
+  /* --- ferrugem: semântica, e com muita conta. Alertas e estados. --- */
+  --color-rust: #b04a2a; /* 3.47:1 sobre void: SÓ texto grande ou grafismo. */
+
+  /* --- tipografia --- */
+  --font-display: var(--font-archivo), "Archivo", system-ui, sans-serif;
+  --font-body: var(--font-archivo), "Archivo", system-ui, sans-serif;
+  --font-data: var(--font-plex-mono), "IBM Plex Mono", ui-monospace, monospace;
+
+  /* --- movimento --- */
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* ============================================================================
+   Base
+   ========================================================================== */
+
+:root {
+  color-scheme: dark;
+}
+
+html {
+  scroll-behavior: smooth;
+  -webkit-text-size-adjust: 100%;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+body {
+  background-color: var(--color-void);
+  color: var(--color-chalk);
+  font-family: var(--font-body);
+  font-synthesis-weight: none;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+  overflow-x: clip;
+}
+
+::selection {
+  background-color: var(--color-oxide-solid);
+  color: var(--color-carbon);
+}
+
+:focus-visible {
+  outline: 2px solid var(--color-oxide-solid);
+  outline-offset: 3px;
+  border-radius: 1px;
+}
+
+/* ============================================================================
+   Tipografia: as escalas
+
+   O display corre no eixo de largura (wdth) do Archivo, mas para o lado
+   CONDENSADO. O esqueleto anterior estava a 112%, expandido; esta casa está a
+   87%. É a mesma família e é uma silhueta completamente diferente: condensado
+   e pesado é a letra de placa estampada e de catálogo de máquinas, que é
+   exatamente a referência. E poupa uma dependência de tipo de letra nova.
+   ========================================================================== */
+
+.t-display {
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-stretch: 87%;
+  line-height: 0.88;
+  letter-spacing: -0.015em;
+  text-wrap: balance;
+}
+
+.t-headline {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-stretch: 92%;
+  line-height: 1.02;
+  letter-spacing: -0.01em;
+  text-wrap: balance;
+}
+
+/* A voz dos dados: mono, caixa-alta, espaçada. É a placa do fabricante. */
+.t-data {
+  font-family: var(--font-data);
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  font-size: 0.6875rem;
+  line-height: 1.3;
+}
+
+.t-numeral {
+  font-family: var(--font-data);
+  font-weight: 500;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -0.02em;
+}
+
+.t-body {
+  font-family: var(--font-body);
+  line-height: 1.6;
+  text-wrap: pretty;
+}
+
+table,
+.tabular {
+  font-variant-numeric: tabular-nums;
+}
+
+/* ============================================================================
+   Textura: o grão
+   Um site sem uma única fotografia (ver media.ts) fica oco se for liso. Sobre
+   fundo escuro o grão tem de CLAREAR, não escurecer: em multiply desaparecia.
+   ========================================================================== */
+
+.grain::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0.05;
+  mix-blend-mode: screen;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  z-index: 1;
+}
+
+/* A banda de papel é clara: aí o grão volta a multiply, ou some. */
+.grain-ink::before {
+  mix-blend-mode: multiply;
+  opacity: 0.045;
+}
+
+/* Rede de linhas: a grelha do caderno de registo. */
+.ruled {
+  background-image:
+    linear-gradient(var(--color-hairline) 1px, transparent 1px),
+    linear-gradient(90deg, var(--color-hairline) 1px, transparent 1px);
+  background-size: 64px 64px;
+  background-position: -1px -1px;
+}
+
+/* ============================================================================
+   Movimento
+   ========================================================================== */
+
+@keyframes rise {
+  from {
+    opacity: 0;
+    transform: translateY(14px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+.rise {
+  animation: rise 0.7s var(--ease-out-expo) both;
+}
+
+@keyframes wipe {
+  from {
+    transform: scaleX(0);
+  }
+  to {
+    transform: scaleX(1);
+  }
+}
+
+.wipe {
+  transform-origin: left;
+  animation: wipe 0.9s var(--ease-out-expo) both;
+}
+
+.reveal {
+  opacity: 0;
+  transform: translateY(20px);
+  transition:
+    opacity 0.8s var(--ease-out-expo),
+    transform 0.8s var(--ease-out-expo);
+}
+
+.reveal[data-shown="true"] {
+  opacity: 1;
+  transform: none;
+}
+
+/* ============================================================================
+   Utilitários de composição
+   ========================================================================== */
+
+.rule {
+  border-top: 1px solid var(--color-hairline);
+}
+
+/* Barra lateral de acento, nas entradas do registo do ferro. */
+.tick {
+  position: relative;
+}
+.tick::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 2px;
+  background: var(--color-oxide);
+}
+
+.no-scrollbar {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
