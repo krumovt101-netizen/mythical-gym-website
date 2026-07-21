@@ -273,6 +273,7 @@ export const DICT = {
     rights: { pt: "Todos os direitos reservados.", en: "All rights reserved." },
     langSwitch: { pt: "EN", en: "PT" },
     openedSince: { pt: "Aberto desde", en: "Open since" },
+    preloaderLine: { pt: "Registo de ferro · Pombal", en: "A record of iron · Pombal" },
   },
 } as const;
 

@@ -4,7 +4,8 @@ import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { CartProvider } from "@/components/CartProvider";
 import { CartDrawer } from "@/components/CartDrawer";
-import { Main } from "@/components/Main";
+import { Preloader } from "@/components/motion/Preloader";
+import { DICT } from "@/content/dictionary";
 import { LOCALES, isLocale, SITE, type Locale } from "@/content/site";
 
 export function generateStaticParams() {
@@ -80,13 +81,18 @@ export default async function LocaleLayout({
       />
       <a
         href="#main"
-        className="t-data sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-100 focus:bg-oxide-solid focus:px-4 focus:py-3 focus:text-carbon"
+        className="t-data sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-100 focus:bg-brass focus:px-4 focus:py-3 focus:text-vault"
       >
         {l === "pt" ? "Saltar para o conteúdo" : "Skip to content"}
       </a>
+      <Preloader line={DICT.common.preloaderLine[l]} />
       <Header locale={l} />
       <CartDrawer locale={l} />
-      <Main locale={l}>{children}</Main>
+      {/* Cada página é dona do seu espaçamento de topo: o herói corre por
+          baixo da barra fixa, as interiores abrem com a sua própria banda. */}
+      <main id="main">{children}</main>
+      {/* O grão de película, UMA camada fixa sobre o documento inteiro. */}
+      <div className="grain-site" aria-hidden="true" />
       <Footer locale={l} />
     </CartProvider>
   );

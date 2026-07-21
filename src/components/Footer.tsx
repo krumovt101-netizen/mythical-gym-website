@@ -1,20 +1,24 @@
 import Link from "next/link";
 import { Wordmark } from "./Wordmark";
+import { FoilStamp } from "./registry/FoilStamp";
 import { DICT } from "@/content/dictionary";
 import { SITE, type Locale } from "@/content/site";
 
+/**
+ * O colofão do registo: a morada como assento de livro, as colunas do
+ * índice, e a estampa dourada do único facto que a casa carimba — a data
+ * de abertura. O ano do © é fixo no build: um new Date() aqui rebentaria
+ * o render estático.
+ */
 export function Footer({ locale }: { locale: Locale }) {
   const p = (path: string) => `/${locale}${path}`;
-  const year = 2026; // fixo no build. Um new Date() aqui rebentaria o render estático.
+  const year = 2026;
 
   const cols = [
     {
       title: DICT.nav.gym[locale],
       links: [
         { href: p("/ginasio"), label: DICT.gym.title[locale] },
-        /* O registo do ferro deixou de ter página própria e vive agora numa
-           secção da página do ginásio. Com uma máquina catalogada, uma página
-           inteira era mais moldura do que quadro. */
         { href: p("/ginasio#ferro"), label: DICT.iron.title[locale] },
         { href: p("/ginasio#equipamento"), label: DICT.gym.equipmentTitle[locale] },
         { href: p("/ginasio#chegar"), label: DICT.gym.visitTitle[locale] },
@@ -24,71 +28,64 @@ export function Footer({ locale }: { locale: Locale }) {
       title: DICT.nav.shop[locale],
       links: [{ href: p("/loja"), label: DICT.shop.all[locale] }],
     },
+    {
+      title: DICT.nav.contact[locale],
+      links: [
+        { href: p("/contactos"), label: DICT.contact.title[locale] },
+        { href: p("/contactos#aderir"), label: DICT.nav.join[locale] },
+      ],
+    },
   ];
 
   return (
-    <footer className="relative overflow-hidden border-t border-hairline bg-void">
-      <div className="mx-auto max-w-[92rem] px-5 py-16 sm:px-8 sm:py-20">
-        <div className="grid gap-12 lg:grid-cols-[1.4fr_repeat(3,1fr)]">
+    <footer className="relative border-t border-rule bg-vault">
+      <div className="mx-auto max-w-[92rem] px-5 py-20 sm:px-8 sm:py-24">
+        <div className="grid gap-14 lg:grid-cols-[1.4fr_repeat(3,1fr)]">
           <div>
             <Wordmark />
-            <address className="t-body mt-6 space-y-1 text-sm not-italic text-steel">
-              <p>{SITE.address.street}</p>
-              <p>{SITE.address.area}</p>
-              {/* O código postal está por confirmar. Escrever "null, Pombal" no
-                  rodapé de um site publicado é o género de coisa que ninguém vê
-                  em revisão e toda a gente vê no ar. */}
-              <p>
-                {SITE.address.postal ? `${SITE.address.postal}, ` : ""}
-                {SITE.address.municipality}
-              </p>
-              <p className="pt-1 text-steel-dim">{SITE.address.landmark[locale]}</p>
-
-              {/* Só se houver telefone. Não há, à data. Um `tel:` vazio é um link
-                  que marca um número em branco. */}
-              {SITE.phone.e164 && (
-                <p className="pt-3">
+            <address className="mt-8 not-italic">
+              <div className="max-w-sm divide-y divide-rule border-y border-rule">
+                <p className="t-body py-3 text-sm text-mercury">{SITE.address.street}</p>
+                <p className="t-body py-3 text-sm text-mercury">
+                  {SITE.address.area}
+                  {SITE.address.postal ? `, ${SITE.address.postal}` : ""},{" "}
+                  {SITE.address.municipality}
+                </p>
+                <p className="t-body py-3 text-sm text-cream-dim">
+                  {SITE.address.landmark[locale]}
+                </p>
+                {/* Só se houver telefone. Não há, à data: um tel: vazio é um
+                    link que marca um número em branco. */}
+                {SITE.phone.e164 && (
+                  <p className="t-body py-3 text-sm">
+                    <a href={`tel:${SITE.phone.e164}`} className="text-cream hover:text-brass">
+                      {SITE.phone.display}
+                    </a>
+                  </p>
+                )}
+                <p className="py-3">
                   <a
-                    href={`tel:${SITE.phone.e164}`}
-                    className="text-chalk transition-colors hover:text-oxide"
+                    href={SITE.social.instagram}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="t-data text-cream transition-colors hover:text-brass"
                   >
-                    {SITE.phone.display}
+                    {SITE.social.instagramHandle}
                   </a>
                 </p>
-              )}
+              </div>
             </address>
-
-            <div className="mt-6 flex gap-4">
-              <a
-                href={SITE.social.instagram}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="t-data text-steel transition-colors hover:text-chalk"
-              >
-                {SITE.social.instagramHandle}
-              </a>
-              {SITE.social.facebook && (
-                <a
-                  href={SITE.social.facebook}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="t-data text-steel transition-colors hover:text-chalk"
-                >
-                  Facebook
-                </a>
-              )}
-            </div>
           </div>
 
           {cols.map((col) => (
             <nav key={col.title} aria-label={col.title}>
-              <h2 className="t-data text-oxide">{col.title}</h2>
-              <ul className="mt-5 space-y-3">
+              <h2 className="t-data text-brass">{col.title}</h2>
+              <ul className="mt-6 space-y-3">
                 {col.links.map((l) => (
                   <li key={l.href + l.label}>
                     <Link
                       href={l.href}
-                      className="t-body text-sm text-steel transition-colors hover:text-chalk"
+                      className="t-body text-sm text-mercury transition-colors hover:text-cream"
                     >
                       {l.label}
                     </Link>
@@ -99,13 +96,18 @@ export function Footer({ locale }: { locale: Locale }) {
           ))}
         </div>
 
-        <div className="mt-16 flex flex-col gap-4 border-t border-hairline pt-8 sm:flex-row sm:items-center sm:justify-between">
-          <p className="t-body max-w-xl text-xs text-steel-dim">
-            {DICT.common.footerNote[locale]}
-          </p>
-          <p className="t-data shrink-0 text-steel-dim">
-            © {year} {SITE.name}. {DICT.common.rights[locale]}
-          </p>
+        <div className="mt-16 border-t border-rule pt-8">
+          <FoilStamp>
+            {DICT.common.openedSince[locale]} {SITE.opened.label[locale]}
+          </FoilStamp>
+          <div className="mt-8 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+            <p className="t-body max-w-xl text-xs text-mercury/80">
+              {DICT.common.footerNote[locale]}
+            </p>
+            <p className="t-data shrink-0 text-mercury/80">
+              © {year} {SITE.name}. {DICT.common.rights[locale]}
+            </p>
+          </div>
         </div>
       </div>
     </footer>
