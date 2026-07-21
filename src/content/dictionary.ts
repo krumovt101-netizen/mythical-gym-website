@@ -48,62 +48,16 @@ export const DICT = {
   },
 
   home: {
-    heroKicker: { pt: "Pombal, Zona Industrial da Formiga", en: "Pombal, Formiga industrial estate" },
-    heroLine1: { pt: "Ferro que já", en: "Iron they no" },
-    heroLine2: { pt: "não se fabrica.", en: "longer make." },
+    heroKicker: { pt: "Pombal · Zona Industrial da Formiga", en: "Pombal · Formiga industrial estate" },
+    heroTitle: { pt: "Ferro que já não se fabrica.", en: "Iron they no longer make." },
     heroBody: {
       pt: "Um armazém em Pombal, com máquinas catalogadas uma a uma, por marca e por ano. Portas abertas desde 1 de julho de 2026.",
       en: "A warehouse in Pombal, with machines catalogued one by one, by maker and by year. Open since 1 July 2026.",
     },
-    heroCtaGym: { pt: "Ver o ginásio", en: "See the gym" },
     heroCtaIron: { pt: "Ver o registo", en: "See the record" },
+    heroStamp: { pt: "Registo aberto · Nº 001", en: "Record open · Nº 001" },
 
-    /* OS CAPÍTULOS DO DIA. A homepage conta um dia de treino, das 05:30 às
-       23:00, em capítulos de scroll. As horas dos kickers são a espinha da
-       narrativa (a mesma do relógio fixo), não um horário publicado: o
-       horário verdadeiro continua a viver em site.ts e no rodapé. */
-    journey: {
-      luz: {
-        kicker: { pt: "07:00", en: "07:00" },
-        line: {
-          pt: "A luz chega primeiro que as pessoas. O ferro já cá estava.",
-          en: "The light arrives before the people. The iron was already here.",
-        },
-      },
-      mecanismo: {
-        kicker: { pt: "O mecanismo", en: "The mechanism" },
-        line: {
-          pt: "Pivô, alavanca, disco. Construído quando construir era para durar.",
-          en: "Pivot, lever, plate. Built when building meant lasting.",
-        },
-      },
-      cheio: {
-        kicker: { pt: "18:30", en: "18:30" },
-        line: {
-          pt: "A hora em que a sala trabalha. Magnésio no ar, ferro no chão.",
-          en: "The hour the floor works. Chalk in the air, iron on the ground.",
-        },
-      },
-      fecho: {
-        kicker: { pt: "23:00", en: "23:00" },
-        line: {
-          pt: "A última luz apaga-se. Amanhã recomeça às 05:30.",
-          en: "The last light goes out. Tomorrow begins again at 05:30.",
-        },
-      },
-    },
-
-    /* A ficha técnica: o registo tratado como documento de engenharia. */
-    blueprint: {
-      kicker: { pt: "Ficha do registo", en: "Registry sheet" },
-      maker: { pt: "Fabricante", en: "Maker" },
-      model: { pt: "Modelo", en: "Model" },
-      era: { pt: "Era", en: "Era" },
-      source: { pt: "Fonte", en: "Source" },
-    },
-
-    /* A tese. Substitui o bloco "duas metades" do esqueleto original: o Mythical
-       é uma coisa só, e diluí-lo em duas colunas era enfraquecê-lo. */
+    /* A tese: o argumento comercial inteiro em três frases. */
     thesisKicker: { pt: "Porque é que isto importa", en: "Why this matters" },
     thesisTitle: {
       pt: "Uma máquina de 1991 não se encomenda.",
@@ -114,24 +68,50 @@ export const DICT = {
       en: "You find it, and you buy it from whoever has it. That is the difference between a gym that opened with a catalogue and a gym that opened with a search. Any club in Pombal can buy better equipment than ours tomorrow morning. None of them can buy older equipment.",
     },
 
-    /* O registo do ferro. É o coração do site. */
+    /* A PEÇA: a entrada Nº 001 do registo, tratada como um lote de leiloeira.
+       Os rótulos são os da ficha; os valores vêm de machines.ts. */
+    lot: {
+      kicker: { pt: "Do registo do ferro", en: "From the record of the iron" },
+      maker: { pt: "Fabricante", en: "Maker" },
+      model: { pt: "Modelo", en: "Model" },
+      era: { pt: "Fabrico", en: "Built" },
+      status: { pt: "Estado", en: "Status" },
+      statusValue: { pt: "Catalogada. No pavilhão.", en: "Catalogued. On the floor." },
+      source: { pt: "Fonte", en: "Source" },
+      sourceValue: { pt: "Instagram da casa", en: "The house's Instagram" },
+      link: { pt: "O registo completo", en: "The full record" },
+      /* A vista explodida é uma ILUSTRAÇÃO genérica, e a legenda di-lo. Não
+         se afirma que é a prensa do registo: seria atribuir à casa uma
+         imagem que não é dela. */
+      diagramKicker: { pt: "Vista explodida", en: "Exploded view" },
+      diagramLine: {
+        pt: "Pivô, alavanca, disco. Construído quando construir era para durar. Ilustração provisória: não é a prensa do registo.",
+        en: "Pivot, lever, plate. Built when building meant lasting. Placeholder illustration: not the press in the record.",
+      },
+    },
+
+    /* O livro de registo. É o coração do site. */
     ironTitle: { pt: "O registo do ferro", en: "The record of the iron" },
     ironBody: {
       pt: "Cada máquina com a marca, o modelo e o ano em que saiu da fábrica. O registo começou no dia em que abrimos e cresce a cada peça que entra.",
       en: "Every machine with its maker, model and year of manufacture. The record began the day we opened and grows with each piece that arrives.",
     },
     ironLink: { pt: "Ver o registo completo", en: "See the full record" },
-    ironEmpty: {
-      pt: "O registo está a ser levantado.",
-      en: "The record is being compiled.",
+    ledgerOpen: {
+      pt: "O registo continua. Uma máquina de cada vez.",
+      en: "The record continues. One machine at a time.",
     },
 
-    spaceTitle: { pt: "Um armazém, não um clube.", en: "A warehouse, not a club." },
-    spaceBody: {
-      pt: "Sem receção de hotel, sem música a competir com as séries, sem aulas a disputar o chão com quem está a levantar. Pé-direito de armazém e espaço para circular.",
-      en: "No hotel lobby, no music competing with your sets, no classes fighting the floor with people who came to lift. Warehouse ceilings and room to move.",
+    /* A faixa dos factos: só o que está confirmado, em estampa. */
+    facts: {
+      kicker: { pt: "O que está confirmado", en: "What is confirmed" },
+      opened: { pt: "Abertura", en: "Opened" },
+      entry: { pt: "Registo Nº 001", en: "Record Nº 001" },
+      channel: { pt: "O canal da casa", en: "The house channel" },
     },
 
+    /* Consumidos apenas pela página do ginásio v1; morrem com ela na Fase 4
+       do rebuild (a secção está atrás de showBrands(), hoje falso). */
     equipmentTitle: { pt: "As marcas em casa", en: "The makers in the house" },
     equipmentBody: {
       pt: "Esta lista sai do registo, e não de um folheto. Só aparece aqui uma marca de que exista pelo menos uma máquina catalogada lá dentro.",
@@ -146,6 +126,11 @@ export const DICT = {
     shopLink: { pt: "Ver a loja", en: "Browse the shop" },
 
     visitTitle: { pt: "Aparece", en: "Come in" },
+    spaceTitle: { pt: "Um armazém, não um clube.", en: "A warehouse, not a club." },
+    spaceBody: {
+      pt: "Sem receção de hotel, sem música a competir com as séries, sem aulas a disputar o chão com quem está a levantar. Pé-direito de armazém e espaço para circular.",
+      en: "No hotel lobby, no music competing with your sets, no classes fighting the floor with people who came to lift. Warehouse ceilings and room to move.",
+    },
     visitBody: {
       pt: "Rua José António Varela Pinto, armazém 4, na Zona Industrial da Formiga. Entre a Sumol e a Cuétara. Manda mensagem antes, se quiseres, mas a porta está aberta.",
       en: "Rua José António Varela Pinto, armazém 4, in the Formiga industrial estate. Between the Sumol and Cuétara plants. Message ahead if you like, but the door is open.",
