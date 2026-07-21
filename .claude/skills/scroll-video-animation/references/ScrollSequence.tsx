@@ -25,6 +25,8 @@ interface Props {
   /** Below this viewport width the canvas is skipped and the poster shows. */
   minWidth?: number;
   posterAlt: string;
+  /** true when this section is the page hero: the poster is the LCP. */
+  priority?: boolean;
   /** Overlay content (headline, CTA). Rendered above the canvas. */
   children?: ReactNode;
   className?: string;
@@ -38,6 +40,7 @@ export default function ScrollSequence({
   scrollLength = 2.5,
   minWidth = 768,
   posterAlt,
+  priority = false,
   children,
   className = "",
 }: Props) {
@@ -173,6 +176,7 @@ export default function ScrollSequence({
         <img
           src={`${base}/poster.webp`}
           alt={posterAlt}
+          fetchPriority={priority ? "high" : "auto"}
           className="absolute inset-0 h-full w-full object-cover"
         />
         {active && (
