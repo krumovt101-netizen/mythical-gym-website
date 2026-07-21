@@ -49,7 +49,10 @@ export const DICT = {
 
   home: {
     heroKicker: { pt: "Pombal · Zona Industrial da Formiga", en: "Pombal · Formiga industrial estate" },
-    heroTitle: { pt: "Ferro que já não se fabrica.", en: "Iron they no longer make." },
+    /* Quebra AUTORADA em duas linhas (a segunda entra avançada): uma quebra
+       acidental num display gigante lê-se como descuido. */
+    heroL1: { pt: "Ferro que já não", en: "Iron they no" },
+    heroL2: { pt: "se fabrica.", en: "longer make." },
     heroBody: {
       pt: "Um armazém em Pombal, com máquinas catalogadas uma a uma, por marca e por ano. Portas abertas desde 1 de julho de 2026.",
       en: "A warehouse in Pombal, with machines catalogued one by one, by maker and by year. Open since 1 July 2026.",
@@ -80,14 +83,17 @@ export const DICT = {
       source: { pt: "Fonte", en: "Source" },
       sourceValue: { pt: "Instagram da casa", en: "The house's Instagram" },
       link: { pt: "O registo completo", en: "The full record" },
-      /* A vista explodida é uma ILUSTRAÇÃO genérica, e a legenda di-lo. Não
-         se afirma que é a prensa do registo: seria atribuir à casa uma
-         imagem que não é dela. */
-      diagramKicker: { pt: "Vista explodida", en: "Exploded view" },
-      diagramLine: {
-        pt: "Pivô, alavanca, disco. Construído quando construir era para durar. Ilustração provisória: não é a prensa do registo.",
-        en: "Pivot, lever, plate. Built when building meant lasting. Placeholder illustration: not the press in the record.",
+    },
+
+    /* OS PLANOS DO FILME. Legendas curtas, em voz de terço inferior. */
+    film: {
+      ferroKicker: { pt: "O ferro", en: "The iron" },
+      ferroLine: {
+        pt: "Pivô, alavanca, disco. Construído quando construir era para durar.",
+        en: "Pivot, lever, plate. Built when building meant lasting.",
       },
+      fechoKicker: { pt: "O pavilhão fecha", en: "The hall closes" },
+      fechoLine: { pt: "O ferro fica.", en: "The iron stays." },
     },
 
     /* O livro de registo. É o coração do site. */

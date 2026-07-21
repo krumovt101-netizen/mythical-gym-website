@@ -57,42 +57,27 @@ export default async function GymPage({
 
   return (
     <>
-      {/* ------------------------------------------------------------- CABEÇALHO */}
-      <Section
-        band="vault"
-        pad="none"
-        bleed={
-          <div className="absolute inset-0">
-            <Figure
-              slot="header-gym"
-              locale={l}
-              priority
-              sizes="100vw"
-              className="size-full"
-              stamp="bottom-right"
-            />
-            <div
-              aria-hidden
-              className="absolute inset-0 bg-gradient-to-t from-vault via-vault/55 to-vault/20"
-            />
-          </div>
-        }
-      >
-        <div className="pb-20 pt-40 sm:pb-24 sm:pt-48">
+      {/* --------------------------------------------------------- CABEÇALHO
+          Documento primeiro, sem fotografia: esta página É o registo, e um
+          registo abre pelo cabeçalho do próprio documento. */}
+      <Section band="vault" pad="none">
+        <div className="pb-16 pt-36 sm:pb-20 sm:pt-44">
           <Reveal effect="fade">
-            <Eyebrow>{SITE.address.landmark[l]}</Eyebrow>
+            <p className="t-data text-mercury">{SITE.address.landmark[l]}</p>
           </Reveal>
           <RevealText
             as="h1"
             text={c.title[l]}
             startIndex={1}
-            className="t-display mt-6 text-[clamp(2.75rem,8vw,6.5rem)] text-cream"
+            className="t-display mt-6 text-[clamp(3rem,10vw,9rem)] text-cream"
           />
-          <Reveal effect="rise" index={3}>
-            <p className="t-lede mt-8 max-w-2xl text-lg text-cream-dim sm:text-xl">{c.lede[l]}</p>
-            <p className="t-headline mt-9 max-w-2xl text-2xl text-brass sm:text-3xl">
-              {c.thesis[l]}
-            </p>
+          <Reveal effect="rise" index={2}>
+            <div className="mt-10 grid gap-8 border-t border-rule pt-8 lg:grid-cols-12">
+              <p className="t-lede text-lg text-cream-dim lg:col-span-5">{c.lede[l]}</p>
+              <p className="t-headline text-xl text-brass lg:col-span-6 lg:col-start-7 sm:text-2xl">
+                {c.thesis[l]}
+              </p>
+            </div>
           </Reveal>
         </div>
       </Section>

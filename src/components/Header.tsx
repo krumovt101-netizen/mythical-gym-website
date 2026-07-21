@@ -80,22 +80,14 @@ export function Header({ locale }: { locale: Locale }) {
           </Link>
 
           <nav className="ml-auto hidden items-center gap-8 lg:flex" aria-label="Principal">
-            {links.map((l, i) => (
+            {links.map((l) => (
               <Link
                 key={l.href}
                 href={l.href}
-                className={`t-data group relative flex items-baseline gap-2 py-1 transition-colors duration-200 ${
+                className={`t-data relative py-1 transition-colors duration-200 ${
                   active(l.href) ? "text-cream" : "text-mercury hover:text-cream"
                 }`}
               >
-                <span
-                  aria-hidden
-                  className={`t-ref text-[0.62rem] transition-colors ${
-                    active(l.href) ? "text-brass" : "text-mercury/60 group-hover:text-brass"
-                  }`}
-                >
-                  {String(i + 1).padStart(2, "0")}
-                </span>
                 {l.label}
                 {active(l.href) && (
                   <span className="absolute -bottom-1 left-0 h-px w-full bg-brass" />
@@ -140,7 +132,7 @@ export function Header({ locale }: { locale: Locale }) {
 
             <Link
               href={p("/contactos#aderir")}
-              className="t-data hidden bg-brass px-4 py-2.5 text-vault transition-colors duration-300 hover:bg-brass-bright sm:block"
+              className="t-stamp hidden bg-brass px-5 py-2.5 text-[0.68rem] text-vault transition-colors duration-300 hover:bg-brass-bright sm:block"
             >
               {DICT.nav.join[locale]}
             </Link>

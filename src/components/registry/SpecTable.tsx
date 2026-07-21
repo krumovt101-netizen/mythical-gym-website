@@ -5,10 +5,13 @@
 export function SpecTable({
   rows,
   onPaper = true,
+  large = false,
   className = "",
 }: {
   rows: { term: string; value: string; href?: string }[];
   onPaper?: boolean;
+  /** Escala de documento: a ficha do dossier, não uma tabela de rodapé. */
+  large?: boolean;
   className?: string;
 }) {
   const border = onPaper ? "divide-paper-rule border-paper-rule" : "divide-rule border-rule";
@@ -23,10 +26,10 @@ export function SpecTable({
       {rows.map((row) => (
         <div
           key={row.term + row.value}
-          className="grid grid-cols-[minmax(7rem,auto)_1fr] items-baseline gap-x-8 py-3.5"
+          className={`grid grid-cols-[minmax(7rem,auto)_1fr] items-baseline gap-x-8 ${large ? "py-5" : "py-3.5"}`}
         >
           <dt className={`t-data ${termTone}`}>{row.term}</dt>
-          <dd className={`t-body text-sm ${valueTone}`}>
+          <dd className={`${large ? "t-headline text-xl sm:text-2xl" : "t-body text-sm"} ${valueTone}`}>
             {row.href ? (
               <a
                 href={row.href}

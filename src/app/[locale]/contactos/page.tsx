@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
 import { Section } from "@/components/registry/Section";
-import { Eyebrow } from "@/components/registry/Eyebrow";
 import { Figure } from "@/components/registry/Figure";
 import { Button } from "@/components/registry/Button";
 import { Reveal } from "@/components/motion/Reveal";
@@ -59,38 +58,17 @@ export default async function ContactPage({
 
   return (
     <>
-      <Section
-        band="vault"
-        pad="none"
-        bleed={
-          <div className="absolute inset-0">
-            <Figure
-              slot="header-contact"
-              locale={l}
-              priority
-              sizes="100vw"
-              className="size-full"
-              stamp="bottom-right"
-            />
-            <div
-              aria-hidden
-              className="absolute inset-0 bg-gradient-to-t from-vault via-vault/55 to-vault/20"
-            />
-          </div>
-        }
-      >
-        <div className="pb-20 pt-40 sm:pb-24 sm:pt-48">
-          <Reveal effect="fade">
-            <Eyebrow>{SITE.address.municipality}</Eyebrow>
-          </Reveal>
+      {/* Folha de contactos batida à máquina: o título e a referência que
+          vale mais do que o número da porta. Sem fotografia de ambiente. */}
+      <Section band="vault" pad="none">
+        <div className="pb-14 pt-36 sm:pb-16 sm:pt-44">
           <RevealText
             as="h1"
             text={c.title[l]}
-            startIndex={1}
-            className="t-display mt-6 text-[clamp(2.75rem,8vw,6.5rem)] text-cream"
+            className="t-display text-[clamp(3rem,10vw,9rem)] text-cream"
           />
-          <Reveal effect="rise" index={2}>
-            <p className="t-lede mt-8 max-w-xl text-lg text-cream-dim sm:text-xl">
+          <Reveal effect="rise" index={1}>
+            <p className="t-headline mt-8 max-w-xl border-t border-rule pt-7 text-xl text-brass sm:text-2xl">
               {SITE.address.landmark[l]}.
             </p>
           </Reveal>

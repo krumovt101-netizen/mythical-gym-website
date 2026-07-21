@@ -3,7 +3,6 @@
 import Link from "next/link";
 import { useEffect, useRef } from "react";
 import { Wordmark } from "./Wordmark";
-import { RefNumber } from "./registry/RefNumber";
 import { trapTab } from "./focus";
 import { DICT } from "@/content/dictionary";
 import { SITE, type Locale } from "@/content/site";
@@ -86,16 +85,17 @@ export function NavOverlay({
         </button>
       </div>
 
+      {/* Três entradas são a oportunidade mais barata do site inteiro para
+          ser monumental: ocupam o ecrã, em serifa fina gigante. */}
       <nav className="flex flex-1 flex-col justify-center px-5" aria-label="Principal">
         {links.map((l, i) => (
           <Link
             key={l.href}
             href={l.href}
-            className="rise group flex items-baseline gap-5 border-b border-rule py-6"
+            className="rise border-b border-rule py-4"
             style={{ animationDelay: `${80 + i * 60}ms` }}
           >
-            <RefNumber n={i + 1} prefix="" className="text-sm" />
-            <span className="t-headline text-4xl text-cream transition-colors group-hover:text-brass-bright">
+            <span className="t-display block text-[17vw] leading-[1.05] text-cream transition-colors active:text-brass-bright">
               {l.label}
             </span>
           </Link>

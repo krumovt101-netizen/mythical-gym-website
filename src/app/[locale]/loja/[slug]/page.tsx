@@ -4,7 +4,7 @@ import type { Metadata } from "next";
 import { ProductPlating, ProductPurchase } from "@/components/ShopClient";
 import { Reveal } from "@/components/motion/Reveal";
 import { DICT } from "@/content/dictionary";
-import { CATEGORIES, PRODUCTS, formatPrice, productBySlug, productRef } from "@/content/shop";
+import { CATEGORIES, PRODUCTS, productBySlug, productRef } from "@/content/shop";
 import { LOCALES, type Locale } from "@/content/site";
 
 export function generateStaticParams() {
@@ -62,19 +62,23 @@ export default async function ProductPage({
           </Reveal>
 
           <Reveal effect="rise" index={1} className="flex flex-col">
-            <div className="flex items-center gap-4">
-              <span className="t-ref text-brass">{productRef(product.slug)}</span>
-              <span aria-hidden className="h-px flex-1 bg-rule" />
-              <span className="t-data text-mercury">{category?.name[l]}</span>
+            {/* A referência de catálogo à escala de fólio, não em corpo de
+                nota de rodapé: numa loja-registo, o número É o produto. */}
+            <div className="flex items-end justify-between gap-6">
+              <span className="t-folio text-[clamp(3rem,7vw,6rem)] text-brass/85">
+                {productRef(product.slug)}
+              </span>
+              <span className="t-data pb-2 text-mercury">{category?.name[l]}</span>
             </div>
 
-            <h1 className="t-display mt-6 text-[clamp(2.5rem,6vw,4.5rem)] text-cream">
+            <h1 className="t-display mt-7 border-t border-rule pt-7 text-[clamp(2.5rem,6vw,4.5rem)] text-cream">
               {product.name[l]}
             </h1>
             <p className="t-lede mt-4 text-lg text-cream-dim">{product.tagline[l]}</p>
 
-            <p className="t-numeral mt-8 text-4xl text-cream sm:text-5xl">
-              {formatPrice(product.price, l)}
+            <p className="t-display mt-8 text-5xl text-cream sm:text-6xl">
+              {product.price}
+              <span className="t-data ml-2 align-super text-mercury">€</span>
             </p>
 
             <p className="t-body mt-8 max-w-xl border-t border-rule pt-8 text-base leading-relaxed text-mercury">

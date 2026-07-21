@@ -2,8 +2,8 @@ import { SHOW_STOCK_TAGS } from "@/content/media";
 import { DICT, t } from "@/content/dictionary";
 import type { Locale } from "@/content/site";
 
-/** Onde assenta o carimbo. "off" para as imagens que já são do cliente;
-    "inline" quando é o chamador a posicioná-lo (herói, composições próprias). */
+/** Onde assenta a anotação. "off" para as imagens que já são do cliente;
+    "inline" quando é o chamador a posicioná-la. */
 export type StampPos = "bottom-left" | "bottom-right" | "top-left" | "top-right" | "inline" | "off";
 
 const POS: Record<Exclude<StampPos, "off">, string> = {
@@ -15,14 +15,14 @@ const POS: Record<Exclude<StampPos, "off">, string> = {
 };
 
 /**
- * O carimbo que diz, em cima da própria imagem, que a imagem não é do
- * cliente. Chapa opaca escura para se ler por cima de qualquer fotografia:
- * mesmo sobre um pixel branco, branco sobre vault/85 passa de 12:1.
+ * A anotação de provisório, na voz do próprio documento: uma linha mono
+ * minúscula com um filete à frente — como uma nota de margem de registo,
+ * não um autocolante de QA. (A chapa amarela com borda que aqui estava
+ * lia-se como overlay de debug, e era meia razão do site parecer inacabado.)
  *
- * Ninguém o liga à mão: sai do interruptor (`stock` em media.ts) e
- * desaparece no dia em que o interruptor mudar. SHOW_STOCK_TAGS desliga o
- * carimbo VISUAL para uma apresentação; não desliga o alt honesto nem a
- * trava do build — essas não se negoceiam.
+ * A honestidade não mudou: sai do interruptor `stock`/`draft`, o alt
+ * di-lo por extenso, e a trava do build continua armada. A sombra de texto
+ * garante leitura sobre qualquer pixel da imagem.
  */
 export function ProvisionalStamp({
   locale,
@@ -36,10 +36,11 @@ export function ProvisionalStamp({
   if (position === "off" || !SHOW_STOCK_TAGS) return null;
   return (
     <span
-      className={`t-data pointer-events-none z-3 inline-flex items-center gap-2 border border-white/25 bg-vault/85 px-2.5 py-1.5 text-white ${POS[position]} ${className}`}
+      className={`t-data pointer-events-none z-3 inline-flex items-center gap-2.5 normal-case tracking-[0.08em] text-white/75 ${POS[position]} ${className}`}
+      style={{ textShadow: "0 1px 3px rgba(0,0,0,0.9), 0 0 12px rgba(0,0,0,0.6)" }}
     >
-      <span aria-hidden className="size-1.5 shrink-0 bg-brass-bright" />
-      {t(DICT.common.provisional, locale)}
+      <span aria-hidden className="h-px w-5 bg-white/40" />
+      {t(DICT.common.provisional, locale).toLowerCase()}
     </span>
   );
 }

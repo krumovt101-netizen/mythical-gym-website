@@ -2,10 +2,10 @@ import type { Metadata } from "next";
 import { Hero } from "@/components/home/Hero";
 import { ThesisStrip } from "@/components/home/ThesisStrip";
 import { LotSection } from "@/components/home/LotSection";
-import { RegistryLedger } from "@/components/home/RegistryLedger";
-import { FactsStrip } from "@/components/home/FactsStrip";
+import { FilmBeat } from "@/components/home/FilmBeat";
 import { ShopTease } from "@/components/home/ShopTease";
-import { VisitBand } from "@/components/home/VisitBand";
+import { Button } from "@/components/registry/Button";
+import { DICT } from "@/content/dictionary";
 import type { Locale } from "@/content/site";
 
 export async function generateMetadata({
@@ -25,14 +25,17 @@ export async function generateMetadata({
 }
 
 /**
- * A HOMEPAGE: o catálogo da casa, na ordem de um catálogo.
+ * A HOMEPAGE É O FILME. Três planos da mesma sala, esfregados pelo scroll,
+ * com o registo como sistema de legendas entre eles:
  *
- *   herói tipográfico  →  a tese  →  A PEÇA (lote Nº 001: ficha em papel +
- *   vista explodida)  →  o livro de registo  →  os factos em estampa  →
- *   a montra da loja  →  a visita.
+ *   ABERTURA (travelling pelo corredor, título gigante)
+ *   → a tese, como movimento tipográfico
+ *   → o DOSSIER Nº 001 em papel (o lote, não uma lista)
+ *   → O FERRO (macro dos discos)
+ *   → a montra
+ *   → FECHO (o candeeiro apaga-se; o site acaba no escuro, com um gesto).
  *
- * Toda a copy vem de dictionary.ts e todos os dados de src/content/. Esta
- * página não sabe factos: compõe-nos.
+ * Toda a copy vem de dictionary.ts e todos os dados de src/content/.
  */
 export default async function HomePage({
   params,
@@ -41,16 +44,30 @@ export default async function HomePage({
 }) {
   const { locale } = await params;
   const l = locale as Locale; // validado no layout
+  const film = DICT.home.film;
 
   return (
     <>
       <Hero locale={l} />
       <ThesisStrip locale={l} />
       <LotSection locale={l} />
-      <RegistryLedger locale={l} />
-      <FactsStrip locale={l} />
+      <FilmBeat
+        slot="ferro"
+        locale={l}
+        kicker={film.ferroKicker[l]}
+        line={film.ferroLine[l]}
+      />
       <ShopTease locale={l} />
-      <VisitBand locale={l} />
+      <FilmBeat
+        slot="fecho"
+        locale={l}
+        kicker={film.fechoKicker[l]}
+        line={film.fechoLine[l]}
+      >
+        <Button href={`/${l}/contactos#aderir`} arrow>
+          {DICT.nav.join[l]}
+        </Button>
+      </FilmBeat>
     </>
   );
 }

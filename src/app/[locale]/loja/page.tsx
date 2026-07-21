@@ -1,8 +1,6 @@
 import type { Metadata } from "next";
 import { ShopClient } from "@/components/ShopClient";
 import { Section } from "@/components/registry/Section";
-import { Eyebrow } from "@/components/registry/Eyebrow";
-import { Figure } from "@/components/registry/Figure";
 import { Reveal } from "@/components/motion/Reveal";
 import { RevealText } from "@/components/motion/RevealText";
 import { DICT } from "@/content/dictionary";
@@ -40,38 +38,17 @@ export default async function ShopPage({
 
   return (
     <>
-      <Section
-        band="vault"
-        pad="none"
-        bleed={
-          <div className="absolute inset-0">
-            <Figure
-              slot="header-shop"
-              locale={l}
-              priority
-              sizes="100vw"
-              className="size-full"
-              stamp="bottom-right"
-            />
-            <div
-              aria-hidden
-              className="absolute inset-0 bg-gradient-to-t from-vault via-vault/55 to-vault/20"
-            />
-          </div>
-        }
-      >
-        <div className="pb-16 pt-40 sm:pb-20 sm:pt-48">
-          <Reveal effect="fade">
-            <Eyebrow>{SITE.address.municipality}</Eyebrow>
-          </Reveal>
+      {/* Grelha primeiro: uma loja abre pelo catálogo, não por uma
+          fotografia de ambiente. O cabeçalho é uma linha de documento. */}
+      <Section band="vault" pad="none">
+        <div className="pb-12 pt-36 sm:pb-14 sm:pt-44">
           <RevealText
             as="h1"
             text={DICT.shop.title[l]}
-            startIndex={1}
-            className="t-display mt-5 text-[clamp(3rem,11vw,7.5rem)] text-cream"
+            className="t-display text-[clamp(3rem,11vw,9rem)] text-cream"
           />
-          <Reveal effect="rise" index={2}>
-            <div className="mt-9 flex flex-col gap-8 border-t border-rule pt-8 sm:flex-row sm:items-start sm:justify-between">
+          <Reveal effect="rise" index={1}>
+            <div className="mt-8 flex flex-col gap-6 border-t border-rule pt-7 sm:flex-row sm:items-baseline sm:justify-between">
               <p className="t-lede max-w-xl text-lg text-cream-dim">{DICT.shop.lede[l]}</p>
               {/* Com rótulo, o número é o que é: contagem do catálogo, não o
                   contador do carrinho ali ao lado. */}

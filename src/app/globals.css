@@ -139,11 +139,34 @@ body {
 
 .t-display {
   font-family: var(--font-display);
-  font-weight: 540;
+  font-weight: 380;
   font-optical-sizing: auto;
-  font-variation-settings: "SOFT" 55, "WONK" 0;
-  line-height: 0.98;
-  letter-spacing: -0.015em;
+  font-variation-settings: "SOFT" 30, "WONK" 0;
+  line-height: 0.95;
+  letter-spacing: -0.03em;
+}
+
+/* O numeral de fólio: Nº monumental a sangrar da margem, peso fino. */
+.t-folio {
+  font-family: var(--font-display);
+  font-weight: 340;
+  font-optical-sizing: auto;
+  font-variation-settings: "SOFT" 30, "WONK" 0;
+  line-height: 0.8;
+  letter-spacing: -0.04em;
+  font-variant-numeric: lining-nums;
+}
+
+/* A voz dos CARIMBOS e dos botões: Archivo expandido, preto, caixa-alta.
+   Uma voz própria para a ação, para nunca vestir a mesma roupa que um
+   rótulo de dados ou um aviso legal. */
+.t-stamp {
+  font-family: var(--font-body);
+  font-stretch: 125%;
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  line-height: 1.1;
 }
 
 .t-headline {
@@ -290,43 +313,22 @@ table,
 @media (prefers-reduced-motion: no-preference) {
   html[data-js] [data-reveal] {
     opacity: 0;
-    transform: translateY(26px);
-    filter: blur(5px);
+    transform: translateY(22px);
   }
   html[data-js] [data-reveal="fade"] {
     transform: none;
-    filter: none;
   }
   html[data-js] [data-reveal="wipe"] {
     transform: scaleX(0);
     transform-origin: left;
-    filter: none;
   }
   html[data-js] [data-reveal][data-shown="true"] {
     opacity: 1;
     transform: none;
-    filter: none;
     transition:
       opacity 0.9s var(--ease-reg),
-      transform 0.9s var(--ease-reg),
-      filter 0.9s var(--ease-reg);
+      transform 0.9s var(--ease-reg);
     transition-delay: calc(var(--i, 0) * 90ms);
-  }
-
-  /* Máscara de título: cada palavra sobe de dentro de uma janela cortada. */
-  html[data-js] .mask-w {
-    display: inline-block;
-    overflow: clip;
-    vertical-align: bottom;
-  }
-  html[data-js] .mask-w > span {
-    display: inline-block;
-    transform: translateY(118%);
-    transition: transform 1.05s var(--ease-drama);
-    transition-delay: calc(var(--i, 0) * 70ms);
-  }
-  html[data-js] [data-shown="true"] .mask-w > span {
-    transform: none;
   }
 
   /* Brilho da estampa dourada, uma vez, quando entra. */

@@ -15,38 +15,27 @@ export function Footer({ locale }: { locale: Locale }) {
   const p = (path: string) => `/${locale}${path}`;
   const year = 2026;
 
-  const cols = [
-    {
-      title: DICT.nav.gym[locale],
-      links: [
-        { href: p("/ginasio"), label: DICT.gym.title[locale] },
-        { href: p("/ginasio#ferro"), label: DICT.iron.title[locale] },
-        /* A secção das marcas só existe com duas ou mais catalogadas
-           (showBrands). Um link para uma âncora que não renderiza levava
-           ao topo da página, sem explicação. */
-        ...(showBrands()
-          ? [{ href: p("/ginasio#equipamento"), label: DICT.gym.equipmentTitle[locale] }]
-          : []),
-        { href: p("/ginasio#chegar"), label: DICT.gym.visitTitle[locale] },
-      ],
-    },
-    {
-      title: DICT.nav.shop[locale],
-      links: [{ href: p("/loja"), label: DICT.shop.all[locale] }],
-    },
-    {
-      title: DICT.nav.contact[locale],
-      links: [
-        { href: p("/contactos"), label: DICT.contact.title[locale] },
-        { href: p("/contactos#aderir"), label: DICT.nav.join[locale] },
-      ],
-    },
+  /* UMA coluna de índice, não três meio-vazias: uma coluna "Loja" com um
+     único link lia-se como prateleira vazia. */
+  const links = [
+    { href: p("/ginasio"), label: DICT.gym.title[locale] },
+    { href: p("/ginasio#ferro"), label: DICT.iron.title[locale] },
+    /* A secção das marcas só existe com duas ou mais catalogadas
+       (showBrands): um link para uma âncora que não renderiza levava ao
+       topo da página, sem explicação. */
+    ...(showBrands()
+      ? [{ href: p("/ginasio#equipamento"), label: DICT.gym.equipmentTitle[locale] }]
+      : []),
+    { href: p("/ginasio#chegar"), label: DICT.gym.visitTitle[locale] },
+    { href: p("/loja"), label: DICT.nav.shop[locale] },
+    { href: p("/contactos"), label: DICT.contact.title[locale] },
+    { href: p("/contactos#aderir"), label: DICT.nav.join[locale] },
   ];
 
   return (
     <footer className="relative border-t border-rule bg-vault">
-      <div className="mx-auto max-w-[92rem] px-5 py-20 sm:px-8 sm:py-24">
-        <div className="grid gap-14 lg:grid-cols-[1.4fr_repeat(3,1fr)]">
+      <div className="mx-auto max-w-[96rem] px-5 py-16 sm:px-8 sm:py-20">
+        <div className="grid gap-14 lg:grid-cols-[1.4fr_1fr]">
           <div>
             <Wordmark />
             <address className="mt-8 not-italic">
@@ -83,26 +72,24 @@ export function Footer({ locale }: { locale: Locale }) {
             </address>
           </div>
 
-          {cols.map((col) => (
-            <nav key={col.title} aria-label={col.title}>
-              <h2 className="t-data text-brass">{col.title}</h2>
-              <ul className="mt-6 space-y-3">
-                {col.links.map((l) => (
-                  <li key={l.href + l.label}>
-                    <Link
-                      href={l.href}
-                      className="t-body text-sm text-mercury transition-colors hover:text-cream"
-                    >
-                      {l.label}
-                    </Link>
-                  </li>
-                ))}
-              </ul>
-            </nav>
-          ))}
+          <nav aria-label="Índice">
+            <h2 className="t-data text-brass">{locale === "pt" ? "Índice" : "Index"}</h2>
+            <ul className="mt-6 space-y-3">
+              {links.map((l) => (
+                <li key={l.href + l.label}>
+                  <Link
+                    href={l.href}
+                    className="t-body text-sm text-mercury transition-colors hover:text-cream"
+                  >
+                    {l.label}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </nav>
         </div>
 
-        <div className="mt-16 border-t border-rule pt-8">
+        <div className="mt-14 border-t border-rule pt-8">
           <FoilStamp>
             {DICT.common.openedSince[locale]} {SITE.opened.label[locale]}
           </FoilStamp>

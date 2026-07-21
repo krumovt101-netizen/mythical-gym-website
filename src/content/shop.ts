@@ -50,10 +50,11 @@ export const CATEGORIES: { id: Category; name: L }[] = [
 const TEE_SIZES = ["XS", "S", "M", "L", "XL", "XXL"];
 
 /**
- * As imagens estão todas a `null` de propósito. As que aqui estavam eram fotos
- * de banco de imagens do projeto anterior, e foram apagadas: mostrar merch
- * genérico de stock como se fosse o da casa é vender uma coisa que não existe.
- * Enquanto for null, entra a chapa desenhada com a placa da marca.
+ * As imagens são MAQUETES GERADAS (peças lisas, sem marca nenhuma, numa só
+ * luz), não fotografias dos produtos. Enquanto `draft` for true levam o
+ * carimbo de provisório e o build de produção continua bloqueado. As fotos
+ * de banco do projeto anterior foram apagadas: mostrar merch de stock como
+ * sendo o da casa era vender roupa de outra gente.
  */
 export const PRODUCTS: Product[] = [
   {
@@ -67,7 +68,7 @@ export const PRODUCTS: Product[] = [
     price: 25,
     category: "vestuario",
     sizes: TEE_SIZES,
-    image: null,
+    image: "/media/loja/t-shirt-wordmark.jpg",
     draft: true,
     featured: true,
   },
@@ -82,7 +83,7 @@ export const PRODUCTS: Product[] = [
     price: 22,
     category: "vestuario",
     sizes: TEE_SIZES,
-    image: null,
+    image: "/media/loja/stringer.jpg",
     draft: true,
     featured: true,
   },
@@ -97,8 +98,9 @@ export const PRODUCTS: Product[] = [
     price: 55,
     category: "vestuario",
     sizes: TEE_SIZES,
-    image: null,
+    image: "/media/loja/hoodie.jpg",
     draft: true,
+    featured: true,
   },
   {
     slug: "cinto-musculacao",
@@ -111,7 +113,7 @@ export const PRODUCTS: Product[] = [
     price: 45,
     category: "equipamento",
     sizes: ["S", "M", "L", "XL"],
-    image: null,
+    image: "/media/loja/cinto-musculacao.jpg",
     draft: true,
     featured: true,
   },
@@ -126,9 +128,9 @@ export const PRODUCTS: Product[] = [
     price: 8,
     category: "equipamento",
     sizes: null,
-    image: null,
+    image: "/media/loja/magnesio.jpg",
     draft: true,
-    featured: true,
+    
   },
 ];
 

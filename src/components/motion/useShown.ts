@@ -25,6 +25,10 @@ export function useShown<T extends HTMLElement>(): [RefObject<T | null>, boolean
     let mo: MutationObserver | undefined;
 
     const arm = () => {
+      /* -15% em baixo: o elemento só dispara quando já entrou A SÉRIO no
+         ecrã, para a transição terminar antes de ser lida. Disparar cedo
+         deixava títulos a meio da animação nas capturas — pior que não
+         animar. */
       io = new IntersectionObserver(
         ([entry]) => {
           if (entry.isIntersecting) {
@@ -32,7 +36,7 @@ export function useShown<T extends HTMLElement>(): [RefObject<T | null>, boolean
             io?.disconnect();
           }
         },
-        { threshold: 0.12, rootMargin: "0px 0px -60px 0px" },
+        { threshold: 0.2, rootMargin: "0px 0px -15% 0px" },
       );
       io.observe(el);
     };

@@ -221,59 +221,43 @@ export interface SequenceShot {
 }
 
 export const SEQUENCES: SequenceShot[] = [
+  /* O FILME v3: três planos, UMA localização, UMA gradação. O plano de
+     abertura e o de fecho são o mesmo enquadramento (continuidade real:
+     partilham o fotograma inicial); o do ferro é o macro da mesma sala.
+     As cinco sequências dos conceitos anteriores continuam em
+     public/media/sequences/ (hero, luz, mecanismo, cheio, fecho), em
+     arquivo: nenhuma página as pede. */
   {
-    slot: "hero",
-    base: "/media/sequences/hero",
-    frameCount: 61,
-    scrollLength: 2.5,
-    stock: true,
-    alt: {
-      pt: "Sala de máquinas escura de um pavilhão industrial, árvores de discos e máquinas de carga em primeiro plano, uma luz quente ao fundo",
-      en: "A dark machine floor in an industrial hall, plate trees and plate-loaded machines up close, one warm light in the distance",
-    },
-  },
-  {
-    slot: "luz",
-    base: "/media/sequences/luz",
-    frameCount: 61,
-    scrollLength: 2,
-    stock: true,
-    alt: {
-      pt: "Luz da manhã a atravessar o chão escuro de um pavilhão de treino",
-      en: "Morning light crossing the dark floor of a training hall",
-    },
-  },
-  {
-    slot: "mecanismo",
-    base: "/media/sequences/mecanismo",
+    slot: "abertura",
+    base: "/media/sequences/abertura",
     frameCount: 61,
     scrollLength: 3,
     stock: true,
     alt: {
-      pt: "Mecanismo de carga antigo em ferro, com discos e alavancas, a separar-se em peças no escuro",
-      en: "A vintage iron loading mechanism, plates and levers, coming apart into its pieces in the dark",
+      pt: "Travelling lento pelo corredor central de um pavilhão às escuras, entre filas de máquinas de carga antigas, em direção a um candeeiro aceso ao fundo",
+      en: "A slow dolly down the dark central aisle of a hall, between rows of vintage plate-loaded machines, toward a single lit lamp at the far end",
     },
   },
   {
-    slot: "cheio",
-    base: "/media/sequences/cheio",
+    slot: "ferro",
+    base: "/media/sequences/ferro",
     frameCount: 61,
-    scrollLength: 2,
+    scrollLength: 2.5,
     stock: true,
     alt: {
-      pt: "Barra carregada sob luz quente ao fim do dia, pó de magnésio no ar",
-      en: "A loaded bar under warm evening light, chalk dust in the air",
+      pt: "Aproximação macro aos rebordos gastos de discos de ferro fundido, com uma luz quente a desenhar o metal",
+      en: "A slow macro push toward the worn rims of cast-iron plates, warm light tracing the metal",
     },
   },
   {
     slot: "fecho",
-    base: "/media/sequences/fecho",
+    base: "/media/sequences/fecho-v3",
     frameCount: 61,
-    scrollLength: 2,
+    scrollLength: 2.5,
     stock: true,
     alt: {
-      pt: "O pavilhão às escuras, a última luz a apagar-se",
-      en: "The hall in darkness, the last light going out",
+      pt: "O corredor do pavilhão, imóvel, enquanto o único candeeiro se apaga até quase tudo ficar negro",
+      en: "The hall aisle, motionless, as the single lamp dies to near black",
     },
   },
 ];
