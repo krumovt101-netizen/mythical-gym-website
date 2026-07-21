@@ -1,95 +1,107 @@
 @import "tailwindcss";
 
 /* ============================================================================
-   MYTHICAL GYM: sistema visual
+   MYTHICAL GYM — "O REGISTO": sistema visual v2
    ---------------------------------------------------------------------------
-   A DIREÇÃO, em duas linhas: um armazém com ferro da era dourada. Carvão quente
-   e latão. Nada de branco clínico, nada de vermelho de ginásio.
+   A DIREÇÃO, numa linha: o ginásio apresentado como uma leiloeira apresenta
+   uma coleção. Um registo público de ferro da era dourada, catalogado peça a
+   peça. Tipografia editorial com serifa (Fraunces) para a voz do catálogo,
+   grotesca (Archivo) para a interface, mono (Plex) para os dados. Carvão
+   quente e latão como sempre: em Pombal os outros são claros, azuis e verdes.
 
-   PORQUÊ ESCURO. Em Pombal, o Pulse, o MoveUP, o Fitness Factory e o Wefit são
-   todos claros, azuis e verdes, com fotografia de gente a sorrir. Um site
-   escuro e quente não é uma preferência estética aqui: é a única forma de não
-   ser confundido com eles ao segundo de scroll. E é a luz que o espaço tem de
-   verdade, que é a de um pavilhão industrial, não a de um health club.
+   O QUE MUDOU DO v1: os VALORES e o vocabulário. `base/vault` são as
+   superfícies, `cream/mercury` o texto, `rule` as linhas, `brass` o acento,
+   `foil` o dourado de estampa. A banda `paper` mantém nome e papel: um registo
+   é um documento, e um documento lê-se em papel.
 
-   PORQUÊ LATÃO. É a cor do metal das placas de fabricante gastas, e é o único
-   acento que uma sala de ferro justifica. Vermelho seria genérico; o latão é
-   semântico, e usa-se com conta: acento, número, estado ativo. Nunca decoração.
+   Todos os pares texto/fundo foram verificados a 4,5:1 (WCAG AA) POR CÁLCULO
+   (scratchpad/contrast.mjs), não a olho. Os rácios estão anotados linha a
+   linha. Duas regras que se partem com facilidade:
+   - texto sobre latão é sempre ESCURO (vault/ink). Branco sobre latão dá
+     menos de 2:1 e é ilegível.
+   - o hover do botão de latão CLAREIA (brass-bright), nunca escurece: o texto
+     é escuro, portanto clarear sobe o contraste.
 
-   NOTA PARA QUEM MEXER NISTO A SEGUIR: os nomes dos tokens vêm do esqueleto
-   anterior e ficaram de propósito, para não haver uma migração de centenas de
-   classes só por causa de nomes. O que mudou foram os VALORES, e com eles os
-   papéis: `void` era a página clara e agora é a página escura, `chalk` era
-   texto escuro e agora é texto claro. A relação texto/fundo mantém-se válida em
-   todos os pares. `paper` continua a ser a banda de pontuação, mas agora é ela
-   a clara, e é o inverso do que era.
-
-   Todos os pares texto/fundo foram verificados a 4.5:1 (WCAG AA) POR CÁLCULO,
-   não a olho. Os rácios estão anotados em cada linha.
+   Escala de z-index (não inventar outros): 30 header · 50 overlays (carrinho,
+   menu) · 70 grão global · 90 preloader.
    ========================================================================== */
 
 @theme {
-  /* --- superfícies escuras: a página --- */
-  --color-void: #121110; /* carvão quente. o fundo de tudo. */
-  --color-iron: #1a1816;
-  --color-iron-2: #232019;
-  --color-iron-3: #2b2721;
-  --color-hairline: #33302b;
-  --color-hairline-soft: #26231f;
-  /* BORDA DE COMPONENTE INTERATIVO, e é outra coisa da linha decorativa acima.
-     A WCAG 1.4.11 pede 3:1 para o limite de um controlo, porque é o limite que
-     diz onde o botão começa e acaba. O `hairline` dá 1,44:1 sobre a página:
-     serve para separar secções, não para desenhar um botão. Medido: 3,56:1
-     sobre `void`, 3,34:1 sobre `iron`, 3,07:1 sobre `iron-2`. */
-  --color-hairline-strong: #6f6b64;
+  /* --- superfícies escuras --- */
+  --color-base: #0f0d0b; /* carvão quente. a página. */
+  --color-base-2: #161310; /* camada elevada: cartões, faixas. */
+  --color-vault: #090807; /* o mais fundo: herói, chapas, cofre. */
 
-  /* --- texto sobre o escuro (contraste sobre #121110) --- */
-  --color-chalk: #f3ede1; /* 16.18:1  principal */
-  --color-chalk-dim: #cfc7b8; /* 11.24:1 */
-  --color-steel: #9c9488; /*  6.29:1  secundário */
-  --color-steel-dim: #8e8679; /*  5.24:1 sobre void, 4.52:1 sobre iron-2.
-                                 É o cinzento mais escuro que ainda passa AA na
-                                 mais clara das bandas escuras. Não escurecer. */
+  /* --- linhas sobre o escuro --- */
+  --color-rule: #2c2822; /* 1,32:1 sobre base: DECORATIVA. separa, não desenha. */
+  --color-rule-soft: #201c17;
+  /* Limite de CONTROLO interativo (WCAG 1.4.11 pede 3:1): 3,84:1 sobre base,
+     3,66:1 sobre base-2. É esta que desenha botões e campos, não a de cima. */
+  --color-rule-strong: #746e64;
 
-  /* --- carbono: mais fundo que a página. herói e chapas de etiqueta. --- */
-  --color-carbon: #0c0b0a;
-  --color-carbon-2: #141210;
+  /* --- texto sobre o escuro (rácios sobre base #0f0d0b) --- */
+  --color-cream: #f5efe3; /* 16,94:1  principal (16,16 sobre base-2) */
+  --color-cream-dim: #d6cdbb; /* 12,29:1 */
+  --color-mercury: #a09786; /*  6,71:1  secundário (6,40 sobre base-2) */
 
-  /* --- a banda de papel: agora é ela a pontuação clara --- */
-  --color-paper: #ece4d5;
-  --color-paper-2: #e0d6c3;
-  --color-paper-line: #c9bda6;
-  /* O mesmo, do lado claro: 3,46:1 sobre o papel. */
-  --color-paper-line-strong: #807867;
-  --color-ink: #17150f; /* 14.45:1 sobre o papel */
-  --color-ink-dim: #56503f; /*  6.36:1 */
+  /* --- a banda de papel: onde vive o registo --- */
+  --color-paper: #eae1cf;
+  --color-paper-2: #ddd1ba;
+  --color-paper-rule: #c6b99e; /* 1,49:1 sobre paper: decorativa. */
+  --color-paper-rule-strong: #7d7562; /* 3,52:1 sobre paper: controlos. */
+  --color-ink: #16120a; /* 14,37:1 sobre paper, 12,36 sobre paper-2 */
+  --color-ink-dim: #57503d; /*  6,17:1 sobre paper, 5,31 sobre paper-2 */
 
-  /* --- latão: o acento da marca --- */
-  --color-oxide: #d9a441; /* 8.39:1 sobre void. Passa como TEXTO PEQUENO, o que
-                             é raro num acento quente e é o que permite usá-lo em
-                             rótulos e não só em títulos. */
-  --color-oxide-solid: #d9a441; /* chapa de botão. O texto por cima é ESCURO
-                                   (text-carbon), nunca branco: branco sobre
-                                   latão dá 1.8:1 e é ilegível. */
-  --color-oxide-bright: #e8bc63; /* 10.60:1. Para quando o latão assenta sobre a
-                                    banda mais clara dos escuros. */
-  --color-oxide-dim: #eabf6a; /* HOVER do botão sólido. Sobe de tom em vez de
-                                 descer, de propósito: o texto do botão é escuro,
-                                 portanto clarear aumenta o contraste. Escurecer
-                                 fá-lo-ia cair abaixo de AA. */
-  --color-oxide-deep: #795712; /* 5.22:1 sobre papel. O latão só se lê sobre a
-                                  banda clara nesta versão escura. */
+  /* --- latão: o acento. Acento, número, estado ativo. Nunca decoração. --- */
+  --color-brass: #d9a441; /* 8,62:1 sobre base, 8,90 sobre vault. Passa como
+                             texto pequeno, o que é raro num acento quente. */
+  --color-brass-bright: #e9bd60; /* HOVER da chapa sólida: sobe de tom.
+                                    vault sobre brass-bright: 11,35:1. */
+  --color-brass-deep: #71500f; /* latão sobre papel: 5,66:1 (4,87 em paper-2) */
+  /* Estampa dourada (gradiente de texto). O stop mais escuro é o que conta:
+     foil-lo dá 6,13:1 sobre base e 6,33:1 sobre vault. */
+  --color-foil-hi: #f2d489;
+  --color-foil-lo: #b58a2f;
 
-  /* --- ferrugem: semântica, e com muita conta. Alertas e estados. --- */
-  --color-rust: #b04a2a; /* 3.47:1 sobre void: SÓ texto grande ou grafismo. */
+  /* --- ferrugem: semântica, com muita conta. --- */
+  --color-rust: #b04a2a; /* 3,56:1 sobre base: SÓ texto grande ou grafismo. */
 
-  /* --- tipografia --- */
-  --font-display: var(--font-archivo), "Archivo", system-ui, sans-serif;
+  /* --- tipografia: três vozes --- */
+  --font-display: var(--font-fraunces), "Fraunces", Georgia, serif;
   --font-body: var(--font-archivo), "Archivo", system-ui, sans-serif;
   --font-data: var(--font-plex-mono), "IBM Plex Mono", ui-monospace, monospace;
 
-  /* --- movimento --- */
-  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+  /* --- movimento: uma voz só --- */
+  --ease-reg: cubic-bezier(0.16, 1, 0.3, 1); /* revelações, hovers */
+  --ease-drama: cubic-bezier(0.76, 0, 0.18, 1); /* máscaras, cortinas */
+  --ease-lift: cubic-bezier(0.32, 0.72, 0, 1); /* gavetas, overlays */
+
+  /* ==========================================================================
+     LEGACY ALIASES — consumidos apenas por CartDrawer/ShopClient/pendentes/
+     not-found até à Fase 4 do rebuild. Apagar na Fase 6, depois de
+     `grep -rE "oxide|chalk|steel|hairline|iron|void|carbon" src/` dar zero
+     fora de src/content. Valores harmonizados com a paleta nova.
+     ========================================================================= */
+  --color-void: #0f0d0b;
+  --color-iron: #161310;
+  --color-iron-2: #1d1813;
+  --color-iron-3: #241e16;
+  --color-carbon: #090807;
+  --color-carbon-2: #120f0c;
+  --color-hairline: #2c2822;
+  --color-hairline-soft: #201c17;
+  --color-hairline-strong: #746e64;
+  --color-chalk: #f5efe3;
+  --color-chalk-dim: #d6cdbb;
+  --color-steel: #a09786;
+  --color-steel-dim: #8e8679;
+  --color-oxide: #d9a441;
+  --color-oxide-solid: #d9a441;
+  --color-oxide-bright: #e9bd60;
+  --color-oxide-dim: #e9bd60;
+  --color-oxide-deep: #71500f;
+  --color-paper-line: #c6b99e;
+  --color-paper-line-strong: #7d7562;
 }
 
 /* ============================================================================
@@ -119,8 +131,8 @@ html {
 }
 
 body {
-  background-color: var(--color-void);
-  color: var(--color-chalk);
+  background-color: var(--color-base);
+  color: var(--color-cream);
   font-family: var(--font-body);
   font-synthesis-weight: none;
   -webkit-font-smoothing: antialiased;
@@ -129,45 +141,69 @@ body {
 }
 
 ::selection {
-  background-color: var(--color-oxide-solid);
-  color: var(--color-carbon);
+  background-color: var(--color-brass);
+  color: var(--color-vault);
 }
 
 :focus-visible {
-  outline: 2px solid var(--color-oxide-solid);
+  outline: 2px solid var(--color-brass);
   outline-offset: 3px;
   border-radius: 1px;
 }
 
 /* ============================================================================
-   Tipografia: as escalas
+   Tipografia: as três vozes do registo
 
-   O display corre no eixo de largura (wdth) do Archivo, mas para o lado
-   CONDENSADO. O esqueleto anterior estava a 112%, expandido; esta casa está a
-   87%. É a mesma família e é uma silhueta completamente diferente: condensado
-   e pesado é a letra de placa estampada e de catálogo de máquinas, que é
-   exatamente a referência. E poupa uma dependência de tipo de letra nova.
+   FRAUNCES é a voz do catálogo: serifa de alto contraste, eixo ótico ligado,
+   SOFT a meio curso para o calor de impressão antiga, WONK desligado (os
+   glifos tortos venderiam "quirky", e uma leiloeira não é quirky). Pesos
+   contidos: uma serifa de luxo nunca corre a 800.
+
+   ARCHIVO é a voz da interface (e do wordmark do cliente — não trocar).
+   PLEX MONO é a voz dos dados: um número é um número, não é marketing.
    ========================================================================== */
 
 .t-display {
   font-family: var(--font-display);
-  font-weight: 800;
-  font-stretch: 87%;
-  line-height: 0.88;
+  font-weight: 540;
+  font-optical-sizing: auto;
+  font-variation-settings: "SOFT" 55, "WONK" 0;
+  line-height: 0.98;
   letter-spacing: -0.015em;
-  text-wrap: balance;
 }
 
 .t-headline {
   font-family: var(--font-display);
-  font-weight: 700;
-  font-stretch: 92%;
-  line-height: 1.02;
-  letter-spacing: -0.01em;
+  font-weight: 500;
+  font-optical-sizing: auto;
+  font-variation-settings: "SOFT" 55, "WONK" 0;
+  line-height: 1.06;
+  letter-spacing: -0.008em;
   text-wrap: balance;
 }
 
-/* A voz dos dados: mono, caixa-alta, espaçada. É a placa do fabricante. */
+/* Parágrafo editorial: a legenda de catálogo, não o corpo de interface. */
+.t-lede {
+  font-family: var(--font-display);
+  font-weight: 420;
+  font-optical-sizing: auto;
+  font-variation-settings: "SOFT" 70, "WONK" 0;
+  line-height: 1.5;
+  text-wrap: pretty;
+}
+
+/* A letra de placa estampada: Archivo condensado e pesado, caixa-alta.
+   Para rótulos industriais curtos, nunca para títulos de catálogo. */
+.t-plate {
+  font-family: var(--font-body);
+  font-weight: 800;
+  font-stretch: 87%;
+  text-transform: uppercase;
+  line-height: 0.92;
+  letter-spacing: 0.01em;
+}
+
+/* A voz dos dados: mono, caixa-alta, espaçada. A placa do fabricante. */
 .t-data {
   font-family: var(--font-data);
   font-weight: 500;
@@ -184,10 +220,39 @@ body {
   letter-spacing: -0.02em;
 }
 
+/* Número de referência do registo: Nº 001. */
+.t-ref {
+  font-family: var(--font-data);
+  font-weight: 500;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 0.06em;
+}
+
 .t-body {
   font-family: var(--font-body);
-  line-height: 1.6;
+  line-height: 1.65;
   text-wrap: pretty;
+}
+
+/* Estampa dourada: gradiente preso ao texto, com fallback sólido. O stop
+   escuro (foil-lo) passa AA sozinho, portanto o gradiente nunca cai abaixo. */
+.t-foil {
+  color: var(--color-brass);
+}
+@supports (-webkit-background-clip: text) or (background-clip: text) {
+  .t-foil {
+    background-image: linear-gradient(
+      105deg,
+      var(--color-foil-lo) 0%,
+      var(--color-foil-hi) 42%,
+      var(--color-foil-lo) 85%
+    );
+    background-size: 200% 100%;
+    background-position: 15% 0;
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
 }
 
 table,
@@ -196,11 +261,23 @@ table,
 }
 
 /* ============================================================================
-   Textura: o grão
-   Um site sem uma única fotografia (ver media.ts) fica oco se for liso. Sobre
-   fundo escuro o grão tem de CLAREAR, não escurecer: em multiply desaparecia.
+   Textura: o grão de película
+   Um site sem uma única fotografia real fica oco se for liso. O grão global é
+   UMA camada fixa (pointer-events none) sobre o documento inteiro — nunca
+   dentro de contentores com scroll (repaint contínuo em mobile).
    ========================================================================== */
 
+.grain-site {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 70;
+  opacity: 0.05;
+  mix-blend-mode: screen;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+/* Grão local (herdado do v1; componentes mantidos usam-no até à Fase 4). */
 .grain::before {
   content: "";
   position: absolute;
@@ -211,8 +288,6 @@ table,
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
   z-index: 1;
 }
-
-/* A banda de papel é clara: aí o grão volta a multiply, ou some. */
 .grain-ink::before {
   mix-blend-mode: multiply;
   opacity: 0.045;
@@ -221,15 +296,79 @@ table,
 /* Rede de linhas: a grelha do caderno de registo. */
 .ruled {
   background-image:
-    linear-gradient(var(--color-hairline) 1px, transparent 1px),
-    linear-gradient(90deg, var(--color-hairline) 1px, transparent 1px);
+    linear-gradient(var(--color-rule) 1px, transparent 1px),
+    linear-gradient(90deg, var(--color-rule) 1px, transparent 1px);
   background-size: 64px 64px;
   background-position: -1px -1px;
 }
 
 /* ============================================================================
    Movimento
+
+   O sistema de revelação corre por CSS e IntersectionObserver (ver
+   src/components/motion/). Regras de segurança que não são óbvias:
+   - os estados iniciais escondidos SÓ existem quando `html[data-js]` está
+     presente (posto por um script inline no <head>). Sem JS, tudo visível.
+   - `prefers-reduced-motion` mata todas as durações no bloco lá em cima;
+     os estados iniciais também ficam atrás de no-preference, em dupla.
    ========================================================================== */
+
+@media (prefers-reduced-motion: no-preference) {
+  html[data-js] [data-reveal] {
+    opacity: 0;
+    transform: translateY(26px);
+    filter: blur(5px);
+  }
+  html[data-js] [data-reveal="fade"] {
+    transform: none;
+    filter: none;
+  }
+  html[data-js] [data-reveal="wipe"] {
+    transform: scaleX(0);
+    transform-origin: left;
+    filter: none;
+  }
+  html[data-js] [data-reveal][data-shown="true"] {
+    opacity: 1;
+    transform: none;
+    filter: none;
+    transition:
+      opacity 0.9s var(--ease-reg),
+      transform 0.9s var(--ease-reg),
+      filter 0.9s var(--ease-reg);
+    transition-delay: calc(var(--i, 0) * 90ms);
+  }
+
+  /* Máscara de título: cada palavra sobe de dentro de uma janela cortada. */
+  html[data-js] .mask-w {
+    display: inline-block;
+    overflow: clip;
+    vertical-align: bottom;
+  }
+  html[data-js] .mask-w > span {
+    display: inline-block;
+    transform: translateY(118%);
+    transition: transform 1.05s var(--ease-drama);
+    transition-delay: calc(var(--i, 0) * 70ms);
+  }
+  html[data-js] [data-shown="true"] .mask-w > span {
+    transform: none;
+  }
+
+  /* Brilho da estampa dourada, uma vez, quando entra. */
+  [data-shown="true"] .t-foil {
+    animation: foil-sheen 2.2s var(--ease-reg) 0.35s 1 both;
+  }
+}
+
+@keyframes foil-sheen {
+  from {
+    background-position: 120% 0;
+  }
+  to {
+    background-position: 15% 0;
+  }
+}
 
 @keyframes rise {
   from {
@@ -241,9 +380,8 @@ table,
     transform: none;
   }
 }
-
 .rise {
-  animation: rise 0.7s var(--ease-out-expo) both;
+  animation: rise 0.7s var(--ease-reg) both;
 }
 
 @keyframes wipe {
@@ -254,23 +392,56 @@ table,
     transform: scaleX(1);
   }
 }
-
 .wipe {
   transform-origin: left;
-  animation: wipe 0.9s var(--ease-out-expo) both;
+  animation: wipe 0.9s var(--ease-reg) both;
 }
 
+/* Herdado do v1 (ui.tsx Reveal); morre com ele na Fase 4. */
 .reveal {
   opacity: 0;
   transform: translateY(20px);
   transition:
-    opacity 0.8s var(--ease-out-expo),
-    transform 0.8s var(--ease-out-expo);
+    opacity 0.8s var(--ease-reg),
+    transform 0.8s var(--ease-reg);
 }
-
 .reveal[data-shown="true"] {
   opacity: 1;
   transform: none;
+}
+
+/* ============================================================================
+   Preloader: uma vez por sessão.
+   O script inline no <head> (ver motion/Preloader.tsx) põe `data-pre="1"` no
+   <html> ANTES do primeiro paint se a sessão ainda não o viu. O overlay
+   renderiza sempre no servidor (HTML igual dos dois lados = zero mismatch);
+   é o CSS que decide se aparece. Sem JS o atributo nunca existe e o site
+   abre limpo.
+   ========================================================================== */
+
+.preloader {
+  position: fixed;
+  inset: 0;
+  z-index: 90;
+  background: var(--color-vault);
+  display: none;
+  align-items: center;
+  justify-content: center;
+}
+html[data-pre="1"] .preloader {
+  display: flex;
+}
+.preloader[data-done="true"] {
+  animation: pre-exit 0.65s var(--ease-drama) forwards;
+}
+@keyframes pre-exit {
+  to {
+    opacity: 0;
+    visibility: hidden;
+  }
+}
+html[data-pre="1"] .pre-mark {
+  animation: rise 0.9s var(--ease-reg) both;
 }
 
 /* ============================================================================
@@ -278,10 +449,13 @@ table,
    ========================================================================== */
 
 .rule {
-  border-top: 1px solid var(--color-hairline);
+  border-top: 1px solid var(--color-rule);
+}
+.rule-paper {
+  border-top: 1px solid var(--color-paper-rule);
 }
 
-/* Barra lateral de acento, nas entradas do registo do ferro. */
+/* Barra lateral de acento, nas entradas do registo. */
 .tick {
   position: relative;
 }
@@ -292,7 +466,7 @@ table,
   top: 0;
   bottom: 0;
   width: 2px;
-  background: var(--color-oxide);
+  background: var(--color-brass);
 }
 
 .no-scrollbar {

@@ -1,13 +1,29 @@
 import type { Metadata } from "next";
-import { Archivo, IBM_Plex_Mono } from "next/font/google";
+import { Archivo, Fraunces, IBM_Plex_Mono } from "next/font/google";
+import { PRELOADER_GATE_SCRIPT } from "@/components/motion/preloader-gate";
 import "./globals.css";
 
 /**
- * Archivo: grotesca americana, robusta, com eixo de largura.
- * Deliberadamente NÃO é a Montserrat/Anton/Bebas em 900 caixa-alta que todo o
- * vertical do fitness usa. Aqui corre no lado CONDENSADO do eixo (ver .t-display
- * em globals.css), que é a letra de placa estampada e de catálogo de máquinas.
+ * As três vozes do registo (ver globals.css):
+ *
+ * FRAUNCES — a voz do catálogo. Serifa variável com eixo ótico (opsz), SOFT
+ * (calor de impressão) e WONK (desligado por CSS; os glifos tortos venderiam
+ * "quirky"). Só o estilo normal: o itálico dobrava o payload e ainda nenhum
+ * momento do desenho o pede. Os nomes dos eixos são case-sensitive.
+ *
+ * ARCHIVO — a voz da interface, com eixo de largura. É também a letra em que
+ * o wordmark do cliente está composto (Wordmark.tsx herda do body): a
+ * variável --font-archivo não pode mudar de nome.
+ *
+ * PLEX MONO — a voz dos dados. Um número é um número, não é marketing.
  */
+const fraunces = Fraunces({
+  subsets: ["latin"],
+  axes: ["SOFT", "WONK", "opsz"],
+  variable: "--font-fraunces",
+  display: "swap",
+});
+
 const archivo = Archivo({
   subsets: ["latin"],
   axes: ["wdth"],
@@ -15,7 +31,6 @@ const archivo = Archivo({
   display: "swap",
 });
 
-/** A voz dos dados. Um número é um número, não é marketing. */
 const plexMono = IBM_Plex_Mono({
   subsets: ["latin"],
   weight: ["400", "500", "600"],
@@ -44,8 +59,16 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="pt" className={`${archivo.variable} ${plexMono.variable}`} suppressHydrationWarning>
-      <body>{children}</body>
+    <html
+      lang="pt"
+      className={`${fraunces.variable} ${archivo.variable} ${plexMono.variable}`}
+      suppressHydrationWarning
+    >
+      <body>
+        {/* Corre antes do paint do conteúdo: data-js + data-pre no <html>. */}
+        <script dangerouslySetInnerHTML={{ __html: PRELOADER_GATE_SCRIPT }} />
+        {children}
+      </body>
     </html>
   );
 }
