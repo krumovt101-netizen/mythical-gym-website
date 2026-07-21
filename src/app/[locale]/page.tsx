@@ -6,7 +6,8 @@ import { Shot, ProvisionalTag } from "@/components/Shot";
 import { Plate } from "@/components/Wordmark";
 import { DICT, fill } from "@/content/dictionary";
 import { SITE, type Locale } from "@/content/site";
-import { shot, isStock } from "@/content/media";
+import { shot, isStock, HERO_SEQUENCE } from "@/content/media";
+import ScrollSequence from "@/components/ScrollSequence";
 import { publicClaims, showClaimsBar } from "@/content/registry";
 import { brands, showBrands, CAMPAIGN, campaignLive } from "@/content/gym";
 import { confirmedMachines } from "@/content/machines";
@@ -44,17 +45,98 @@ export default async function HomePage({
   const makers = brands();
   const products = featuredProducts();
   const heroPhoto = shot("hero")?.src;
+  const heroSequence = HERO_SEQUENCE.frameCount > 0;
+
+  /* Os véus do herói, partilhados pelos dois heróis possíveis (sequência e
+     fotografia). A calibração está comentada mais abaixo, junto ao herói
+     original; é UMA calibração, e é por isso que isto é um fragmento e não
+     duas cópias. */
+  const heroVeils = (
+    <>
+      <div
+        aria-hidden
+        className="absolute inset-x-0 bottom-0 z-1 h-[80%] bg-gradient-to-t from-carbon from-10% via-carbon/72 via-55% to-transparent"
+      />
+      <div aria-hidden className="absolute inset-0 z-1 bg-carbon/8" />
+      <div
+        aria-hidden
+        className="absolute inset-y-0 left-0 z-1 w-full bg-gradient-to-r from-carbon/72 via-carbon/48 via-30% to-transparent to-58%"
+      />
+      <div
+        aria-hidden
+        className="absolute inset-x-0 top-0 z-1 h-32 bg-gradient-to-b from-carbon/85 to-transparent"
+      />
+    </>
+  );
+
+  const heroText = (
+    <div className="relative z-2 mx-auto w-full max-w-[92rem] px-5 pt-28 pb-16 sm:px-8 sm:pt-36 sm:pb-24">
+      <p className="t-data rise text-oxide">{c.heroKicker[l]}</p>
+
+      <h1 className="mt-6 sm:mt-8">
+        <span className="t-display rise block text-[clamp(2.75rem,8.5vw,7.5rem)] text-white">
+          {c.heroLine1[l]}
+        </span>
+        <span
+          className="t-display rise block text-[clamp(2.75rem,8.5vw,7.5rem)] text-oxide"
+          style={{ animationDelay: "90ms" }}
+        >
+          {c.heroLine2[l]}
+        </span>
+      </h1>
+
+      <div
+        className="rise mt-10 grid gap-8 border-t border-white/20 pt-8 sm:mt-12 lg:grid-cols-[minmax(0,44ch)_minmax(0,1fr)] lg:items-center lg:gap-16"
+        style={{ animationDelay: "180ms" }}
+      >
+        <p className="t-body text-base text-white/85 sm:text-lg">{c.heroBody[l]}</p>
+
+        <div className="flex flex-wrap items-center gap-x-3 gap-y-5 lg:justify-end">
+          <Button href={`/${l}/ginasio`}>{c.heroCtaGym[l]}</Button>
+          <Button href={`/${l}/ginasio#ferro`} variant="outline-invert">
+            {c.heroCtaIron[l]}
+          </Button>
+        </div>
+      </div>
+    </div>
+  );
 
   return (
     <>
-      {/* ---------------------------------------------------------------- HERO
+      {heroSequence ? (
+        /* ------------------------------------------------------------- HERO
+           COM SEQUÊNCIA DE SCROLL. O scroll faz scrub de um dolly-out: começa
+           num detalhe das árvores de discos e recua até ao plano largo do
+           pavilhão — o detalhe revela-se parte de um plano maior. A sequência
+           é gerada por computador e leva a etiqueta de provisório como
+           qualquer imagem de banco; ver HERO_SEQUENCE em content/media.ts,
+           e a skill scroll-video-animation para o pipeline. */
+        <ScrollSequence
+          base={HERO_SEQUENCE.base}
+          frameCount={HERO_SEQUENCE.frameCount}
+          scrollLength={HERO_SEQUENCE.scrollLength}
+          posterAlt={`${HERO_SEQUENCE.alt[l]}. ${DICT.common.provisionalAlt[l]}`}
+          priority
+          className="isolate bg-carbon"
+        >
+          {/* O grão vive no viewport preso, não na secção alta: senão a
+              textura esticava pelos 250vh e diluía-se. */}
+          <div aria-hidden className="grain absolute inset-0" />
+          {heroVeils}
+          <div className="flex h-full items-end">{heroText}</div>
+          {HERO_SEQUENCE.stock && (
+            <ProvisionalTag locale={l} position="bottom-right" className="z-3" />
+          )}
+        </ScrollSequence>
+      ) : (
+      /* ---------------------------------------------------------------- HERO
           NÃO HÁ FOTOGRAFIA DESTE GINÁSIO, e o herói foi desenhado a contar com
           isso e não a lamentá-lo. Enquanto não houver foto, o fundo é a grelha
           do caderno de registo e o grão: o herói é tipográfico, e a tipografia
           condensada e pesada aguenta o ecrã sozinha.
 
           No dia em que a fotografia chegar, basta escrever o `src` em media.ts:
-          ela entra por trás com o mesmo véu, e nada aqui muda. */}
+          ela entra por trás com o mesmo véu, e nada aqui muda. */
       <section className="relative isolate flex min-h-[100svh] items-end overflow-hidden bg-carbon grain">
         {heroPhoto ? (
           /* Sem scrim no próprio Shot: o escurecimento é todo feito em baixo,
@@ -94,73 +176,19 @@ export default async function HomePage({
             meio do ecrã. Em cima a fotografia fica visível, que é a razão de ela
             existir. Um véu uniforme forte resolveria o contraste e apagava a
             imagem; um véu fraco mostrava a imagem e deixava o texto ilegível
-            sobre um teto claro. É por isso que são duas camadas e não uma. */}
-        <div
-          aria-hidden
-          className="absolute inset-x-0 bottom-0 z-1 h-[80%] bg-gradient-to-t from-carbon from-10% via-carbon/72 via-55% to-transparent"
-        />
-        {/* Véu geral leve, para assentar a foto no carvão da marca sem a apagar. */}
-        <div aria-hidden className="absolute inset-0 z-1 bg-carbon/8" />
-        {/* A COLUNA DO TEXTO.
+            sobre um teto claro. É por isso que são duas camadas e não uma.
 
-            Este é o véu que resolve o problema a sério, e não se descobre a
-            olho: a fotografia tem projetores de teto a 239/255, e um deles cai
-            exatamente por trás do título. Medido, o latão do título ficava em
-            1,51:1 contra os 3:1 que a norma exige para texto grande. A página
-            parecia bem e reprovava.
+            O TERCEIRO VÉU, o da coluna do texto, é o que resolve o problema a
+            sério: a fotografia tinha projetores de teto a 239/255 e o latão do
+            título media 1,51:1 contra os 3:1 da norma. Escurecer só a coluna
+            esquerda resolve o contraste e deixa a imagem respirar à direita.
+            Estes valores são o mínimo que sustenta o latão acima de 3:1 sobre
+            o pior pixel debaixo dos glifos, medido e não estimado. Não subir
+            sem medir outra vez. Os quatro véus estão em `heroVeils`, em cima,
+            partilhados com o herói de sequência. */}
+        {heroVeils}
 
-            Escurecer o herói todo o suficiente para o pior pixel apagava a
-            fotografia inteira. Escurecer só a coluna esquerda, onde o texto
-            vive, resolve o contraste e deixa a imagem respirar à direita.
-
-            SEGUNDA CALIBRAÇÃO. À primeira, sobre-corrigi: o véu ia a 100 por
-            cento até aos 5 por cento da largura e a 78 por cento aos 42, e
-            somado às outras duas camadas punha a metade esquerda exatamente no
-            #0c0b0a do fundo. O contraste passava e a fotografia desaparecia, o
-            que é trocar um defeito por outro. Estes valores são o mínimo que
-            ainda sustenta o latão do título acima de 3:1 sobre o pior pixel que
-            cai debaixo dos glifos, medido e não estimado. Não subir sem medir
-            outra vez. */}
-        <div
-          aria-hidden
-          className="absolute inset-y-0 left-0 z-1 w-full bg-gradient-to-r from-carbon/72 via-carbon/48 via-30% to-transparent to-58%"
-        />
-        {/* Faixa do topo: o cabeçalho é transparente sobre o herói e escreve a
-            branco, portanto a legibilidade dele tem de vir daqui. */}
-        <div
-          aria-hidden
-          className="absolute inset-x-0 top-0 z-1 h-32 bg-gradient-to-b from-carbon/85 to-transparent"
-        />
-
-        <div className="relative z-2 mx-auto w-full max-w-[92rem] px-5 pt-28 pb-16 sm:px-8 sm:pt-36 sm:pb-24">
-          <p className="t-data rise text-oxide">{c.heroKicker[l]}</p>
-
-          <h1 className="mt-6 sm:mt-8">
-            <span className="t-display rise block text-[clamp(2.75rem,8.5vw,7.5rem)] text-white">
-              {c.heroLine1[l]}
-            </span>
-            <span
-              className="t-display rise block text-[clamp(2.75rem,8.5vw,7.5rem)] text-oxide"
-              style={{ animationDelay: "90ms" }}
-            >
-              {c.heroLine2[l]}
-            </span>
-          </h1>
-
-          <div
-            className="rise mt-10 grid gap-8 border-t border-white/20 pt-8 sm:mt-12 lg:grid-cols-[minmax(0,44ch)_minmax(0,1fr)] lg:items-center lg:gap-16"
-            style={{ animationDelay: "180ms" }}
-          >
-            <p className="t-body text-base text-white/85 sm:text-lg">{c.heroBody[l]}</p>
-
-            <div className="flex flex-wrap items-center gap-x-3 gap-y-5 lg:justify-end">
-              <Button href={`/${l}/ginasio`}>{c.heroCtaGym[l]}</Button>
-              <Button href={`/${l}/ginasio#ferro`} variant="outline-invert">
-                {c.heroCtaIron[l]}
-              </Button>
-            </div>
-          </div>
-        </div>
+        {heroText}
 
         {/* A etiqueta sai DE DENTRO da foto e assenta por cima dos véus.
             Dentro do <Shot> ela ficava por baixo dos três gradientes e não se
@@ -170,6 +198,7 @@ export default async function HomePage({
             texto não ocupa. */}
         {isStock("hero") && <ProvisionalTag locale={l} position="bottom-right" className="z-3" />}
       </section>
+      )}
 
       {/* ------------------------------------------------------ BARRA DE NÚMEROS
           Só aparece com três ou mais factos verificados. Hoje há um, portanto

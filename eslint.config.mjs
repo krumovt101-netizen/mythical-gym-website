@@ -12,6 +12,9 @@ const eslintConfig = defineConfig([
     "out/**",
     "build/**",
     "next-env.d.ts",
+    // Build estático antigo, guardado só como referência de design.
+    "reference/**",
+    "archive/**",
   ]),
 ]);
 

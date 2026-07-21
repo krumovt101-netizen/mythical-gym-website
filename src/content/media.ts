@@ -219,6 +219,34 @@ export const SHOTS: Shot[] = [
   },
 ];
 
+/**
+ * A SEQUÊNCIA DO HERÓI (scroll).
+ *
+ * O herói da homepage faz scrub de uma sequência de fotogramas conforme o
+ * scroll: um dolly-out lento que começa num detalhe das árvores de discos e
+ * acaba no plano largo do pavilhão. O plano largo é também o poster (o que o
+ * SSR pinta primeiro, e o que vê quem tem reduced-motion ou um ecrã pequeno).
+ *
+ * GERADA POR COMPUTADOR, E NÃO É O PAVILHÃO. Vale a mesma regra das fotos de
+ * banco: `stock: true` põe a etiqueta "Imagem provisória" no ecrã, o alt
+ * di-lo a quem ouve o site, e a sequência sai no dia em que houver filmagem
+ * real da casa. O pipeline para a refazer (fotogramas → vídeo → sequência)
+ * está documentado na skill `scroll-video-animation`.
+ *
+ * `frameCount: 0` desliga a sequência por completo: o herói volta à
+ * fotografia de `hero` (ou à chapa desenhada), como estava antes.
+ */
+export const HERO_SEQUENCE = {
+  base: "/media/sequences/hero",
+  frameCount: 61,
+  scrollLength: 2.5,
+  stock: true,
+  alt: {
+    pt: "Sala de máquinas escura de um pavilhão industrial, árvores de discos e máquinas de carga em primeiro plano, uma luz quente ao fundo",
+    en: "A dark machine floor in an industrial hall, plate trees and plate-loaded machines up close, one warm light in the distance",
+  } as L,
+};
+
 export const shot = (slot: string): Shot | undefined => SHOTS.find((s) => s.slot === slot);
 
 /** Para as secções onde a etiqueta tem de ser desenhada por fora da foto. */
