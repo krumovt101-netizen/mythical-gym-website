@@ -87,7 +87,7 @@ export function Wordmark({
   const mark = compact ? 26 : 34;
   return (
     <span
-      className={`inline-flex items-center gap-3 ${onDark ? "text-white" : "text-chalk"} ${className}`}
+      className={`inline-flex items-center gap-3 ${onDark ? "text-white" : "text-cream"} ${className}`}
     >
       <Plate size={mark} />
       <span className="inline-flex flex-col items-start leading-none">

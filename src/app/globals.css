@@ -76,32 +76,6 @@
   --ease-drama: cubic-bezier(0.76, 0, 0.18, 1); /* máscaras, cortinas */
   --ease-lift: cubic-bezier(0.32, 0.72, 0, 1); /* gavetas, overlays */
 
-  /* ==========================================================================
-     LEGACY ALIASES — consumidos apenas por CartDrawer/ShopClient/pendentes/
-     not-found até à Fase 4 do rebuild. Apagar na Fase 6, depois de
-     `grep -rE "oxide|chalk|steel|hairline|iron|void|carbon" src/` dar zero
-     fora de src/content. Valores harmonizados com a paleta nova.
-     ========================================================================= */
-  --color-void: #0f0d0b;
-  --color-iron: #161310;
-  --color-iron-2: #1d1813;
-  --color-iron-3: #241e16;
-  --color-carbon: #090807;
-  --color-carbon-2: #120f0c;
-  --color-hairline: #2c2822;
-  --color-hairline-soft: #201c17;
-  --color-hairline-strong: #746e64;
-  --color-chalk: #f5efe3;
-  --color-chalk-dim: #d6cdbb;
-  --color-steel: #a09786;
-  --color-steel-dim: #8e8679;
-  --color-oxide: #d9a441;
-  --color-oxide-solid: #d9a441;
-  --color-oxide-bright: #e9bd60;
-  --color-oxide-dim: #e9bd60;
-  --color-oxide-deep: #71500f;
-  --color-paper-line: #c6b99e;
-  --color-paper-line-strong: #7d7562;
 }
 
 /* ============================================================================

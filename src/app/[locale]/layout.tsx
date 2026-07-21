@@ -74,6 +74,17 @@ export default async function LocaleLayout({
 
   return (
     <CartProvider>
+      {/* O <html lang> vive no layout de raiz, acima deste segmento, e diz
+          "pt". Nas rotas /en isto corrige-o antes do primeiro paint, para
+          leitores de ecrã lerem inglês como inglês. Os crawlers têm os
+          alternates hreflang nos metadados. */}
+      {l !== "pt" && (
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `document.documentElement.lang=${JSON.stringify(l)}`,
+          }}
+        />
+      )}
       <script
         type="application/ld+json"
         // O objeto é nosso e estático, não há aqui entrada de utilizador.

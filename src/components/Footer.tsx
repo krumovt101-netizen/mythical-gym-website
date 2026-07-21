@@ -2,6 +2,7 @@ import Link from "next/link";
 import { Wordmark } from "./Wordmark";
 import { FoilStamp } from "./registry/FoilStamp";
 import { DICT } from "@/content/dictionary";
+import { showBrands } from "@/content/gym";
 import { SITE, type Locale } from "@/content/site";
 
 /**
@@ -20,7 +21,12 @@ export function Footer({ locale }: { locale: Locale }) {
       links: [
         { href: p("/ginasio"), label: DICT.gym.title[locale] },
         { href: p("/ginasio#ferro"), label: DICT.iron.title[locale] },
-        { href: p("/ginasio#equipamento"), label: DICT.gym.equipmentTitle[locale] },
+        /* A secção das marcas só existe com duas ou mais catalogadas
+           (showBrands). Um link para uma âncora que não renderiza levava
+           ao topo da página, sem explicação. */
+        ...(showBrands()
+          ? [{ href: p("/ginasio#equipamento"), label: DICT.gym.equipmentTitle[locale] }]
+          : []),
         { href: p("/ginasio#chegar"), label: DICT.gym.visitTitle[locale] },
       ],
     },
