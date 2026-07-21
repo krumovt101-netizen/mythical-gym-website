@@ -38,6 +38,7 @@ export function FilmBeat({
         frameCount={seq.frameCount}
         scrollLength={seq.scrollLength}
         lazy
+        edgeFade="both"
         posterAlt={`${t(seq.alt, locale)}. ${t(DICT.common.provisionalAlt, locale)}`}
       >
         <div

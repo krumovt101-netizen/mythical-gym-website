@@ -69,7 +69,7 @@ du -sh public/media/sequences/<name>   # BUDGET: ≤5 MB total (dark graded foot
 
 Use the template at `references/ScrollSequence.tsx` → copy to `src/components/ScrollSequence.tsx` (already there if a previous section used it — reuse, don't duplicate). It is an isolated `"use client"` leaf; pages stay server components.
 
-What the template already handles (don't re-solve): sticky pinning with configurable scroll length, rAF-throttled scroll→frame mapping, progressive preload (first frame immediately, rest in background, nearest-loaded fallback), devicePixelRatio-aware cover drawing, `prefers-reduced-motion` → static poster, small-viewport → static poster, zero CLS (the pin container owns its height), cleanup on unmount.
+What the template already handles (don't re-solve): sticky pinning with configurable scroll length, **inertial scrubbing** (the playhead chases the scroll target in a rAF lerp, k≈0.16 — 12fps frames read 1:1 off the wheel produce visible stepping; the chase makes the film settle like a weighted playhead and the loop kills itself when settled), **edge dissolves** (`edgeFade="both"|"out"` fades a vault curtain over the first/last 12% of pin progress so beats fade in/out instead of hard-cutting at unpin; heroes use `"out"` so they don't wake up covered), progressive preload (first frame immediately, rest in background, nearest-loaded fallback), devicePixelRatio-aware cover drawing, `prefers-reduced-motion` → static poster, small-viewport → static poster, zero CLS (the pin container owns its height), cleanup on unmount.
 
 Integration contract:
 ```tsx

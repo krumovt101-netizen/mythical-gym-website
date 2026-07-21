@@ -66,6 +66,7 @@ export function Hero({ locale }: { locale: Locale }) {
         frameCount={seq.frameCount}
         scrollLength={seq.scrollLength}
         priority
+        edgeFade="out"
         posterAlt={`${t(seq.alt, locale)}. ${t(DICT.common.provisionalAlt, locale)}`}
       >
         {overlay}
