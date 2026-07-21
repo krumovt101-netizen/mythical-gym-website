@@ -2,7 +2,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
 import { ProductPlating, ProductPurchase } from "@/components/ShopClient";
-import { Reveal } from "@/components/ui";
+import { Reveal } from "@/components/motion/Reveal";
 import { DICT } from "@/content/dictionary";
 import { CATEGORIES, PRODUCTS, formatPrice, productBySlug, productRef } from "@/content/shop";
 import { LOCALES, type Locale } from "@/content/site";
@@ -30,6 +30,7 @@ export async function generateMetadata({
   };
 }
 
+/** A página de produto como ficha de catálogo: referência, chapa, specs. */
 export default async function ProductPage({
   params,
 }: {
@@ -43,38 +44,40 @@ export default async function ProductPage({
   const category = CATEGORIES.find((c) => c.id === product.category);
 
   return (
-    <section className="bg-void pb-24 pt-12 sm:pb-32 sm:pt-16">
+    <section className="bg-base pb-24 pt-28 sm:pb-32 sm:pt-32">
       <div className="mx-auto max-w-[92rem] px-5 sm:px-8">
         <Link
           href={`/${l}/loja`}
-          className="t-data inline-flex items-center gap-2.5 text-steel transition-colors duration-300 hover:text-chalk"
+          className="t-data inline-flex items-center gap-2.5 text-mercury transition-colors duration-300 hover:text-cream"
         >
-          <span aria-hidden>←</span>
+          <svg width="11" height="11" viewBox="0 0 12 12" fill="none" aria-hidden>
+            <path d="M10 6H2m0 0l3.5-3.5M2 6l3.5 3.5" stroke="currentColor" strokeWidth="1.4" />
+          </svg>
           {DICT.shop.backToShop[l]}
         </Link>
 
         <div className="mt-10 grid gap-12 lg:grid-cols-2 lg:gap-20">
-          <Reveal>
+          <Reveal effect="rise">
             <ProductPlating product={product} locale={l} />
           </Reveal>
 
-          <Reveal delay={60} className="flex flex-col">
+          <Reveal effect="rise" index={1} className="flex flex-col">
             <div className="flex items-center gap-4">
-              <span className="t-data text-oxide">{productRef(product.slug)}</span>
-              <span aria-hidden className="h-px flex-1 bg-hairline" />
-              <span className="t-data text-steel-dim">{category?.name[l]}</span>
+              <span className="t-ref text-brass">{productRef(product.slug)}</span>
+              <span aria-hidden className="h-px flex-1 bg-rule" />
+              <span className="t-data text-mercury">{category?.name[l]}</span>
             </div>
 
-            <h1 className="t-display mt-6 text-[clamp(2.5rem,6vw,4.5rem)] text-chalk">
+            <h1 className="t-display mt-6 text-[clamp(2.5rem,6vw,4.5rem)] text-cream">
               {product.name[l]}
             </h1>
-            <p className="t-body mt-4 text-lg text-chalk-dim">{product.tagline[l]}</p>
+            <p className="t-lede mt-4 text-lg text-cream-dim">{product.tagline[l]}</p>
 
-            <p className="t-numeral mt-8 text-4xl text-chalk sm:text-5xl">
+            <p className="t-numeral mt-8 text-4xl text-cream sm:text-5xl">
               {formatPrice(product.price, l)}
             </p>
 
-            <p className="t-body mt-8 max-w-xl border-t border-hairline pt-8 text-base leading-relaxed text-steel">
+            <p className="t-body mt-8 max-w-xl border-t border-rule pt-8 text-base leading-relaxed text-mercury">
               {product.description[l]}
             </p>
 
@@ -82,7 +85,7 @@ export default async function ProductPage({
               <ProductPurchase product={product} locale={l} />
             </div>
 
-            <p className="t-body mt-8 max-w-xl border-t border-hairline-soft pt-6 text-xs leading-relaxed text-steel-dim">
+            <p className="t-body mt-8 max-w-xl border-t border-rule-soft pt-6 text-xs leading-relaxed text-mercury/80">
               {DICT.shop.checkoutNote[l]}
             </p>
           </Reveal>

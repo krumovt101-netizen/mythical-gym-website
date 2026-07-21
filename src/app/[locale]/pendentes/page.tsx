@@ -30,9 +30,9 @@ function Section({
   children: React.ReactNode;
 }) {
   return (
-    <section className="border-t border-hairline py-12">
-      <h2 className="t-headline text-2xl text-chalk sm:text-3xl">{title}</h2>
-      {lede && <p className="t-body mt-3 max-w-[70ch] text-steel">{lede}</p>}
+    <section className="border-t border-rule py-12">
+      <h2 className="t-headline text-2xl text-cream sm:text-3xl">{title}</h2>
+      {lede && <p className="t-body mt-3 max-w-[70ch] text-mercury">{lede}</p>}
       <div className="mt-8">{children}</div>
     </section>
   );
@@ -40,9 +40,9 @@ function Section({
 
 function Item({ title, why }: { title: string; why: string }) {
   return (
-    <li className="tick border-b border-hairline-soft py-6 pl-6">
-      <p className="t-headline text-lg text-chalk">{title}</p>
-      <p className="t-body mt-2 max-w-[80ch] text-sm text-steel">{why}</p>
+    <li className="tick border-b border-rule-soft py-6 pl-6">
+      <p className="t-headline text-lg text-cream">{title}</p>
+      <p className="t-body mt-2 max-w-[80ch] text-sm text-mercury">{why}</p>
     </li>
   );
 }
@@ -140,11 +140,11 @@ export default async function PendingPage({
 
   return (
     <div className="mx-auto max-w-[76rem] px-5 pt-36 pb-24 sm:px-8 sm:pt-44">
-      <p className="t-data text-oxide">{l === "pt" ? "Documento interno" : "Internal document"}</p>
-      <h1 className="t-display mt-6 text-[clamp(2.5rem,7vw,5rem)] text-chalk">
+      <p className="t-data text-brass">{l === "pt" ? "Documento interno" : "Internal document"}</p>
+      <h1 className="t-display mt-6 text-[clamp(2.5rem,7vw,5rem)] text-cream">
         {l === "pt" ? "O que falta" : "What is missing"}
       </h1>
-      <p className="t-body mt-8 max-w-[70ch] text-lg text-chalk-dim">
+      <p className="t-body mt-8 max-w-[70ch] text-lg text-cream-dim">
         {l === "pt"
           ? "Tudo o que este site se recusa a publicar por não estar confirmado, e o que é preciso para desbloquear cada coisa. Esta lista é gerada a partir dos interruptores do próprio código: quando preencherem um, ele desaparece daqui sozinho."
           : "Everything this site refuses to publish because it is unconfirmed, and what is needed to unblock each item. This list is generated from the code's own switches: fill one in and it disappears from here by itself."}

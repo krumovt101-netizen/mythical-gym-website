@@ -68,7 +68,7 @@ export function CartDrawer({ locale }: { locale: Locale }) {
 
   return (
     <div
-      className="fixed inset-0 z-100 flex justify-end bg-void/80 backdrop-blur-sm"
+      className="fixed inset-0 z-50 flex justify-end bg-vault/80 backdrop-blur-sm"
       onClick={(e) => e.target === e.currentTarget && setOpen(false)}
     >
       <aside
@@ -76,17 +76,17 @@ export function CartDrawer({ locale }: { locale: Locale }) {
         role="dialog"
         aria-modal="true"
         aria-label={DICT.shop.cart[locale]}
-        className="flex h-full w-full max-w-md flex-col border-l border-hairline bg-iron"
+        className="flex h-full w-full max-w-md flex-col border-l border-rule bg-base-2"
       >
-        <header className="flex items-center justify-between border-b border-hairline px-6 py-5">
-          <h2 className="t-data text-chalk">
+        <header className="flex items-center justify-between border-b border-rule px-6 py-5">
+          <h2 className="t-data text-cream">
             {DICT.shop.cart[locale]}
-            {count > 0 && <span className="ml-2 text-oxide">{count}</span>}
+            {count > 0 && <span className="ml-2 text-brass">{count}</span>}
           </h2>
           <button
             ref={closeRef}
             onClick={() => setOpen(false)}
-            className="t-data text-steel transition-colors hover:text-chalk"
+            className="t-data text-mercury transition-colors hover:text-cream"
             aria-label={DICT.nav.close[locale]}
           >
             ✕
@@ -96,19 +96,19 @@ export function CartDrawer({ locale }: { locale: Locale }) {
         {lines.length === 0 ? (
           <div className="flex flex-1 flex-col items-center justify-center gap-5 px-8 text-center">
             <Plate className="opacity-20" size={44} />
-            <p className="t-headline text-2xl text-chalk">{DICT.shop.cartEmpty[locale]}</p>
-            <p className="t-body text-sm text-steel">{DICT.shop.cartEmptyBody[locale]}</p>
+            <p className="t-headline text-2xl text-cream">{DICT.shop.cartEmpty[locale]}</p>
+            <p className="t-body text-sm text-mercury">{DICT.shop.cartEmptyBody[locale]}</p>
             <Link
               href={`/${locale}/loja`}
               onClick={() => setOpen(false)}
-              className="t-data mt-2 border border-hairline px-5 py-3 text-chalk transition-colors hover:border-oxide hover:text-oxide"
+              className="t-data mt-2 border border-rule px-5 py-3 text-cream transition-colors hover:border-brass hover:text-brass"
             >
               {DICT.shop.backToShop[locale]}
             </Link>
           </div>
         ) : (
           <>
-            <ul className="flex-1 divide-y divide-hairline-soft overflow-y-auto">
+            <ul className="flex-1 divide-y divide-rule-soft overflow-y-auto">
               {lines.map((line) => {
                 const p = resolve(line);
                 if (!p) return null;
@@ -119,7 +119,7 @@ export function CartDrawer({ locale }: { locale: Locale }) {
                   : p.name[locale];
                 return (
                   <li key={`${line.slug}-${line.size}`} className="flex gap-4 p-6">
-                    <div className="relative size-20 shrink-0 overflow-hidden border border-hairline bg-iron-2">
+                    <div className="relative size-20 shrink-0 overflow-hidden border border-rule bg-base-2">
                       {p.image ? (
                         <Image
                           src={p.image}
@@ -136,29 +136,29 @@ export function CartDrawer({ locale }: { locale: Locale }) {
                     </div>
 
                     <div className="min-w-0 flex-1">
-                      <p className="t-headline truncate text-base text-chalk">
+                      <p className="t-headline truncate text-base text-cream">
                         {p.name[locale]}
                       </p>
                       {line.size && (
-                        <p className="t-data mt-1 text-steel-dim">
+                        <p className="t-data mt-1 text-mercury/80">
                           {DICT.shop.size[locale]} {line.size}
                         </p>
                       )}
                       <div className="mt-3 flex items-center gap-3">
-                        <div className="flex items-center border border-hairline">
+                        <div className="flex items-center border border-rule">
                           <button
                             onClick={() => setQty(line.slug, line.size, line.qty - 1)}
-                            className="grid size-8 place-items-center text-steel transition-colors hover:text-chalk"
+                            className="grid size-8 place-items-center text-mercury transition-colors hover:text-cream"
                             aria-label={`${DICT.shop.decrease[locale]}: ${item}`}
                           >
                             −
                           </button>
-                          <span className="t-numeral w-7 text-center text-sm text-chalk">
+                          <span className="t-numeral w-7 text-center text-sm text-cream">
                             {line.qty}
                           </span>
                           <button
                             onClick={() => setQty(line.slug, line.size, line.qty + 1)}
-                            className="grid size-8 place-items-center text-steel transition-colors hover:text-chalk"
+                            className="grid size-8 place-items-center text-mercury transition-colors hover:text-cream"
                             aria-label={`${DICT.shop.increase[locale]}: ${item}`}
                           >
                             +
@@ -166,7 +166,7 @@ export function CartDrawer({ locale }: { locale: Locale }) {
                         </div>
                         <button
                           onClick={() => remove(line.slug, line.size)}
-                          className="t-data text-steel-dim transition-colors hover:text-oxide"
+                          className="t-data text-mercury/80 transition-colors hover:text-brass"
                           aria-label={`${DICT.shop.remove[locale]}: ${item}`}
                         >
                           {DICT.shop.remove[locale]}
@@ -174,7 +174,7 @@ export function CartDrawer({ locale }: { locale: Locale }) {
                       </div>
                     </div>
 
-                    <p className="t-numeral shrink-0 text-sm text-chalk">
+                    <p className="t-numeral shrink-0 text-sm text-cream">
                       {formatPrice(p.price * line.qty, locale)}
                     </p>
                   </li>
@@ -182,10 +182,10 @@ export function CartDrawer({ locale }: { locale: Locale }) {
               })}
             </ul>
 
-            <footer className="border-t border-hairline p-6">
+            <footer className="border-t border-rule p-6">
               <div className="mb-5 flex items-baseline justify-between">
-                <span className="t-data text-steel">{DICT.shop.total[locale]}</span>
-                <span className="t-numeral text-2xl text-chalk">
+                <span className="t-data text-mercury">{DICT.shop.total[locale]}</span>
+                <span className="t-numeral text-2xl text-cream">
                   {formatPrice(total, locale)}
                 </span>
               </div>
@@ -193,11 +193,11 @@ export function CartDrawer({ locale }: { locale: Locale }) {
                 href={waHref}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="t-data flex w-full items-center justify-center gap-2 bg-oxide-solid px-6 py-4 text-white transition-colors hover:bg-oxide-dim"
+                className="t-data flex w-full items-center justify-center gap-2 bg-brass px-6 py-4 text-vault transition-colors hover:bg-brass-bright"
               >
                 {DICT.shop.checkout[locale]} →
               </a>
-              <p className="t-body mt-4 text-xs leading-relaxed text-steel-dim">
+              <p className="t-body mt-4 text-xs leading-relaxed text-mercury/80">
                 {DICT.shop.checkoutNote[locale]}
               </p>
             </footer>

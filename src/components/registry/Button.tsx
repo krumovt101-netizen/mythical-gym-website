@@ -15,6 +15,10 @@ const VARIANTS = {
     "border border-rule-strong text-cream hover:border-cream active:translate-y-px",
   paper:
     "border border-paper-rule-strong text-ink hover:bg-ink hover:text-paper active:translate-y-px",
+  /* O botão PRIMÁRIO da banda clara. Latão cheio sobre papel não serve: o
+     limite do botão contra o papel ficava abaixo de 3:1. Tinta cheia resolve. */
+  "ink":
+    "bg-ink text-paper hover:bg-ink/85 active:translate-y-px",
   ghost: "text-cream hover:text-brass",
 } as const;
 

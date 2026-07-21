@@ -3,14 +3,14 @@
 /**
  * LOJA: a parte interativa.
  * =============================================================================
- * As fotos que estão nos produtos são de banco de imagens, como as do resto do
- * site, e o catálogo inteiro é provisório (`draft: true` em shop.ts). Enquanto
- * assim for, cada foto leva a etiqueta de provisório, exatamente como as do
- * ginásio. Quando o cliente puser as fotos e os preços verdadeiros, muda o
- * `draft` e a etiqueta cai sozinha.
+ * O catálogo inteiro é provisório (`draft: true` em shop.ts) e as imagens dos
+ * produtos estão a null de propósito: merch de banco de imagens era vender
+ * roupa de outra gente. A chapa desenhada (grelha + placa da marca) é a peça
+ * do sistema, não um remendo.
  *
- * A chapa desenhada (ferro + grão + disco), para quando não há foto nenhuma, é
- * a peça do sistema e não um remendo: é o mesmo objeto do cabeçalho do site.
+ * A REGRA DO LATÃO vale aqui como em todo o site: texto sobre chapa de latão
+ * é sempre ESCURO (text-vault), e o hover clareia. O v1 tinha cinco sítios
+ * com branco sobre latão (1,8:1); não voltam.
  */
 
 import Image from "next/image";
@@ -18,8 +18,8 @@ import Link from "next/link";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { useCart } from "./CartProvider";
 import { Plate } from "./Wordmark";
-import { ProvisionalTag } from "./Shot";
-import { Reveal } from "./ui";
+import { ProvisionalStamp } from "./registry/ProvisionalStamp";
+import { Reveal } from "./motion/Reveal";
 import { DICT } from "@/content/dictionary";
 import { CATEGORIES, PRODUCTS, formatPrice, productRef, type Category, type Product } from "@/content/shop";
 import type { Locale } from "@/content/site";
@@ -74,7 +74,7 @@ function SizePicker({
 }) {
   return (
     <div>
-      <p className="t-data mb-2.5 text-steel-dim">{DICT.shop.size[locale]}</p>
+      <p className="t-data mb-2.5 text-mercury">{DICT.shop.size[locale]}</p>
       <div className="flex flex-wrap gap-1.5" role="group" aria-label={`${DICT.shop.size[locale]}: ${name}`}>
         {sizes.map((s) => {
           const on = value === s;
@@ -86,8 +86,8 @@ function SizePicker({
               onClick={() => onSelect(s)}
               className={`t-numeral min-w-11 border px-3 py-2 text-xs transition-colors duration-200 ${
                 on
-                  ? "border-oxide bg-oxide-solid text-white"
-                  : "border-hairline text-steel hover:border-steel hover:text-chalk"
+                  ? "border-brass bg-brass text-vault"
+                  : "border-rule-strong text-mercury hover:border-cream hover:text-cream"
               }`}
             >
               {s}
@@ -100,7 +100,7 @@ function SizePicker({
 }
 
 /* ---------------------------------------------------------------------------
-   Chapa: a moldura do produto. Foto se houver, disco gravado se não houver.
+   Chapa: a moldura do produto. Foto se houver, placa gravada se não houver.
    ------------------------------------------------------------------------ */
 
 function Plating({
@@ -116,14 +116,12 @@ function Plating({
   plate: number;
   className?: string;
 }) {
-  // Com foto por baixo, os dois cantos gravados deixam de assentar em cinzento
-  // liso e passam a assentar em pixels que não controlamos. Ganham chapa.
-  const corner = product.image
-    ? "bg-carbon/85 px-2 py-1 text-white"
-    : "text-steel-dim";
+  // Com foto por baixo, os cantos gravados assentam em pixels que não
+  // controlamos: ganham chapa opaca (branco sobre vault/85 passa de 12:1).
+  const corner = product.image ? "bg-vault/85 px-2 py-1 text-white" : "text-mercury";
 
   return (
-    <div className={`grain relative overflow-hidden bg-iron-2 ${className}`}>
+    <div className={`grain relative overflow-hidden bg-base-2 ${className}`}>
       {product.image ? (
         <Image
           src={product.image}
@@ -141,20 +139,20 @@ function Plating({
           <span aria-hidden className="ruled absolute inset-0 opacity-50" />
           <span
             aria-hidden
-            className="absolute inset-0 grid place-items-center text-hairline transition-colors duration-500 group-hover:text-oxide"
+            className="absolute inset-0 grid place-items-center opacity-30 transition-opacity duration-500 group-hover:opacity-60"
           >
             <Plate size={plate} />
           </span>
         </>
       )}
-      <span className={`t-data absolute left-3 top-3 z-[2] ${corner}`}>
+      <span className={`t-ref absolute left-3 top-3 z-2 text-xs ${corner}`}>
         {productRef(product.slug)}
       </span>
-      <span className={`t-data absolute bottom-3 right-3 z-[2] ${corner}`}>
+      <span className={`t-data absolute bottom-3 right-3 z-2 ${corner}`}>
         {categoryName(product.category, locale)}
       </span>
       {product.draft && product.image && (
-        <ProvisionalTag locale={locale} position="bottom-left" />
+        <ProvisionalStamp locale={locale} position="bottom-left" />
       )}
     </div>
   );
@@ -178,7 +176,7 @@ function Card({ product, locale }: { product: Product; locale: Locale }) {
       : DICT.shop.addToCart[locale];
 
   return (
-    <article className="group flex w-full flex-col bg-iron transition-colors duration-300 hover:bg-iron-2">
+    <article className="group flex w-full flex-col bg-base-2">
       <Link
         href={`/${locale}/loja/${product.slug}`}
         className="block"
@@ -189,24 +187,24 @@ function Card({ product, locale }: { product: Product; locale: Locale }) {
           locale={locale}
           plate={64}
           sizes="(min-width: 1024px) 30vw, (min-width: 640px) 45vw, 92vw"
-          className="aspect-4/5 w-full border-b border-hairline"
+          className="aspect-4/5 w-full border-b border-rule"
         />
       </Link>
 
       <div className="flex flex-1 flex-col gap-4 p-5 sm:p-6">
         <div className="flex items-start justify-between gap-4">
           <div className="min-w-0">
-            <h3 className="t-headline text-lg text-chalk">
+            <h3 className="t-headline text-lg text-cream">
               <Link
                 href={`/${locale}/loja/${product.slug}`}
-                className="transition-colors duration-300 hover:text-oxide"
+                className="transition-colors duration-300 hover:text-brass"
               >
                 {product.name[locale]}
               </Link>
             </h3>
-            <p className="t-body mt-1.5 text-sm text-steel">{product.tagline[locale]}</p>
+            <p className="t-body mt-1.5 text-sm text-mercury">{product.tagline[locale]}</p>
           </div>
-          <p className="t-numeral shrink-0 text-lg text-chalk">
+          <p className="t-numeral shrink-0 text-lg text-cream">
             {formatPrice(product.price, locale)}
           </p>
         </div>
@@ -227,10 +225,10 @@ function Card({ product, locale }: { product: Product; locale: Locale }) {
           onClick={() => commit(product.slug, size)}
           className={`t-data mt-auto w-full border px-5 py-3.5 transition-colors duration-300 ${
             blocked
-              ? "cursor-not-allowed border-hairline-soft text-steel-dim"
+              ? "cursor-not-allowed border-rule text-mercury/60"
               : added
-                ? "border-oxide bg-oxide-solid text-white"
-                : "border-hairline text-chalk hover:border-oxide hover:bg-oxide-solid hover:text-white"
+                ? "border-brass bg-brass text-vault"
+                : "border-rule-strong text-cream hover:border-brass hover:bg-brass hover:text-vault"
           }`}
         >
           {label}
@@ -262,7 +260,7 @@ export function ShopClient({ locale }: { locale: Locale }) {
   ];
 
   return (
-    <section className="border-t border-hairline bg-void py-16 sm:py-20">
+    <section className="border-t border-rule bg-base py-16 sm:py-20">
       <div className="mx-auto max-w-[92rem] px-5 sm:px-8">
         {/* O h1 vive na página; os cartões são h3. Sem este h2 o índice de
             cabeçalhos saltava um nível e o catálogo ficava sem nome. */}
@@ -280,12 +278,12 @@ export function ShopClient({ locale }: { locale: Locale }) {
                   onClick={() => setFilter(tab.id)}
                   className={`t-data flex shrink-0 items-center gap-2.5 border px-4 py-2.5 transition-colors duration-300 ${
                     on
-                      ? "border-oxide bg-oxide-solid text-white"
-                      : "border-hairline text-steel hover:border-steel hover:text-chalk"
+                      ? "border-brass bg-brass text-vault"
+                      : "border-rule-strong text-mercury hover:border-cream hover:text-cream"
                   }`}
                 >
                   {tab.name}
-                  <span className={`t-numeral text-[0.65rem] ${on ? "text-chalk" : "text-steel-dim"}`}>
+                  <span className={`t-numeral text-[0.65rem] ${on ? "text-vault/70" : "text-mercury/70"}`}>
                     {tab.count}
                   </span>
                 </button>
@@ -294,21 +292,15 @@ export function ShopClient({ locale }: { locale: Locale }) {
           </div>
         </div>
 
-        {/* As linhas da grelha são BORDAS DAS CÉLULAS, e não um fundo do
-            container visto através de `gap-px`.
-
-            O truque do `gap-px bg-hairline` é elegante enquanto o número de
-            itens for múltiplo do número de colunas. Com 5 produtos em 3 colunas
-            sobra uma célula que não existe, e o que se vê nela é o fundo do
-            container: um retângulo cinzento que se lê como um cartão partido.
-            Com bordas nas células o problema não pode acontecer, seja qual for
-            a contagem. */}
-        <div className="grid border-l border-t border-hairline sm:grid-cols-2 lg:grid-cols-3">
+        {/* As linhas da grelha são BORDAS DAS CÉLULAS, e não um `gap-px` com
+            fundo: com 5 produtos em 3 colunas sobraria uma célula fantasma
+            cinzenta. Com bordas nas células o problema não pode acontecer. */}
+        <div className="grid border-l border-t border-rule sm:grid-cols-2 lg:grid-cols-3">
           {shown.map((p, i) => (
             <Reveal
               key={p.slug}
-              delay={(i % 3) * 60}
-              className="flex border-b border-r border-hairline bg-iron"
+              index={i % 3}
+              className="flex border-b border-r border-rule bg-base-2"
             >
               <Card product={p} locale={locale} />
             </Reveal>
@@ -360,10 +352,10 @@ export function ProductPurchase({
         onClick={() => commit(product.slug, size)}
         className={`t-data w-full border px-6 py-4 transition-colors duration-300 sm:w-auto sm:min-w-72 ${
           blocked
-            ? "cursor-not-allowed border-hairline-soft text-steel-dim"
+            ? "cursor-not-allowed border-rule text-mercury/60"
             : added
-              ? "border-oxide bg-oxide-solid text-white"
-              : "border-oxide bg-oxide-solid text-white hover:bg-oxide-dim"
+              ? "border-brass bg-brass text-vault"
+              : "border-brass bg-brass text-vault hover:bg-brass-bright"
         }`}
       >
         {label}
@@ -386,7 +378,7 @@ export function ProductPlating({
       locale={locale}
       plate={104}
       sizes="(min-width: 1024px) 45vw, 92vw"
-      className="aspect-4/5 w-full border border-hairline"
+      className="group aspect-4/5 w-full border border-rule"
     />
   );
 }
