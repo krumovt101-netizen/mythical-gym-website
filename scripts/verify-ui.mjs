@@ -85,7 +85,7 @@ const ratio = (a, b) => {
   const hiddenReveals = await page.evaluate(() =>
     [...document.querySelectorAll("[data-reveal]")].filter((el) => getComputedStyle(el).opacity === "0").length,
   );
-  check("reduced-motion: no canvas, poster present", canvases === 0 && posters === 1, `canvas ${canvases}, posters ${posters}`);
+  check("reduced-motion: no canvas, posters present", canvases === 0 && posters === 3, `canvas ${canvases}, posters ${posters}`);
   check("reduced-motion: no invisible content", hiddenReveals === 0, `${hiddenReveals} hidden`);
   await ctx.close();
 }
@@ -176,7 +176,7 @@ const ratio = (a, b) => {
   const page = await ctx.newPage();
   await page.goto("http://localhost:3000/pt", { waitUntil: "networkidle" });
   await page.waitForTimeout(2400);
-  const stamps = await page.getByText("Imagem provisória", { exact: true }).count();
+  const stamps = await page.getByText(/imagem provis/i).count();
   const dishonest = await page.evaluate(() =>
     [...document.querySelectorAll('img[src*="/media/"]')]
       .filter((i) => !i.src.includes("marca") && !i.src.includes("badge") && !i.src.includes("logo"))
@@ -195,8 +195,12 @@ const ratio = (a, b) => {
   page.on("request", (req) => req.url().includes("/media/sequences/") && seqRequests.push(req.url()));
   await page.goto("http://localhost:3000/pt", { waitUntil: "networkidle" });
   await page.waitForTimeout(2000);
-  const framesAtTop = seqRequests.filter((u) => u.includes("frame-")).length;
-  check("no sequence frames loaded above the fold", framesAtTop === 0, `${framesAtTop} frames`);
+  // O herói É o filme: os fotogramas dele carregam já (priority). Os planos
+  // abaixo da dobra (ferro, fecho) têm de ficar lazy até o scroll chegar lá.
+  const heroFrames = seqRequests.filter((u) => u.includes("/abertura/") && u.includes("frame-")).length;
+  const lazyFrames = seqRequests.filter((u) => (u.includes("/ferro/") || u.includes("/fecho-v3/")) && u.includes("frame-")).length;
+  check("hero film frames load eagerly", heroFrames > 0, `${heroFrames} frames`);
+  check("below-fold film beats stay lazy at top", lazyFrames === 0, `${lazyFrames} frames`);
   await page.goto("http://localhost:3000/pt/ginasio", { waitUntil: "networkidle" });
   for (const a of ["#ferro", "#chegar"]) {
     check(`anchor ${a} exists on /ginasio`, (await page.locator(a).count()) === 1);
