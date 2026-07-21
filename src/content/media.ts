@@ -263,7 +263,7 @@ export const SEQUENCES: SequenceShot[] = [
   {
     slot: "luz",
     base: "/media/sequences/luz",
-    frameCount: 0,
+    frameCount: 61,
     scrollLength: 2,
     stock: true,
     alt: {
@@ -274,7 +274,7 @@ export const SEQUENCES: SequenceShot[] = [
   {
     slot: "mecanismo",
     base: "/media/sequences/mecanismo",
-    frameCount: 0,
+    frameCount: 61,
     scrollLength: 3,
     stock: true,
     alt: {
@@ -285,7 +285,7 @@ export const SEQUENCES: SequenceShot[] = [
   {
     slot: "cheio",
     base: "/media/sequences/cheio",
-    frameCount: 0,
+    frameCount: 61,
     scrollLength: 2,
     stock: true,
     alt: {
@@ -296,7 +296,7 @@ export const SEQUENCES: SequenceShot[] = [
   {
     slot: "fecho",
     base: "/media/sequences/fecho",
-    frameCount: 0,
+    frameCount: 61,
     scrollLength: 2,
     stock: true,
     alt: {
