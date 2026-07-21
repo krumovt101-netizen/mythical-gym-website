@@ -41,7 +41,7 @@ export default async function ShopPage({
       {/* Grelha primeiro: uma loja abre pelo catálogo, não por uma
           fotografia de ambiente. O cabeçalho é uma linha de documento. */}
       <Section band="vault" pad="none">
-        <div className="pb-12 pt-36 sm:pb-14 sm:pt-44">
+        <div className="pb-10 pt-32 sm:pb-12 sm:pt-36">
           <RevealText
             as="h1"
             text={DICT.shop.title[l]}

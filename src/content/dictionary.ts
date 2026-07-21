@@ -51,7 +51,7 @@ export const DICT = {
     heroKicker: { pt: "Pombal · Zona Industrial da Formiga", en: "Pombal · Formiga industrial estate" },
     /* Quebra AUTORADA em duas linhas (a segunda entra avançada): uma quebra
        acidental num display gigante lê-se como descuido. */
-    heroL1: { pt: "Ferro que já não", en: "Iron they no" },
+    heroL1: { pt: "Ferro que já\u00A0não", en: "Iron they\u00A0no" },
     heroL2: { pt: "se fabrica.", en: "longer make." },
     heroBody: {
       pt: "Um armazém em Pombal, com máquinas catalogadas uma a uma, por marca e por ano. Portas abertas desde 1 de julho de 2026.",

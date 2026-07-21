@@ -29,7 +29,7 @@ export function LotSection({ locale }: { locale: Locale }) {
       bleed={
         <span
           aria-hidden
-          className="t-folio pointer-events-none absolute -right-[0.06em] -top-[0.06em] select-none text-[clamp(9rem,30vw,30rem)] text-brass-deep/12"
+          className="t-folio pointer-events-none absolute -top-[0.05em] right-0 translate-x-[14%] select-none text-[clamp(8rem,26vw,26rem)] text-brass-deep/12"
         >
           001
         </span>

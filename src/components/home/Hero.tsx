@@ -30,7 +30,7 @@ export function Hero({ locale }: { locale: Locale }) {
           <Reveal effect="rise" index={1}>
             <h1 className="t-display mt-5 text-[clamp(3.4rem,11.5vw,11.5rem)] text-cream">
               <span className="block">{d.heroL1[locale]}</span>
-              <span className="block pl-[6vw] sm:pl-[9vw]">{d.heroL2[locale]}</span>
+              <span className="block sm:pl-[9vw]">{d.heroL2[locale]}</span>
             </h1>
           </Reveal>
           <Reveal effect="rise" index={2}>

@@ -54,6 +54,7 @@ export default async function HomePage({
       <FilmBeat
         slot="ferro"
         locale={l}
+        align="right"
         kicker={film.ferroKicker[l]}
         line={film.ferroLine[l]}
       />
@@ -61,6 +62,7 @@ export default async function HomePage({
       <FilmBeat
         slot="fecho"
         locale={l}
+        big
         kicker={film.fechoKicker[l]}
         line={film.fechoLine[l]}
       >

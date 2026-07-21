@@ -62,16 +62,15 @@ export default async function ProductPage({
           </Reveal>
 
           <Reveal effect="rise" index={1} className="flex flex-col">
-            {/* A referência de catálogo à escala de fólio, não em corpo de
-                nota de rodapé: numa loja-registo, o número É o produto. */}
-            <div className="flex items-end justify-between gap-6">
-              <span className="t-folio text-[clamp(3rem,7vw,6rem)] text-brass/85">
-                {productRef(product.slug)}
-              </span>
-              <span className="t-data pb-2 text-mercury">{category?.name[l]}</span>
+            {/* O NOME é o monumento; a referência é uma nota de latão. Um
+                fólio gigante para uma t-shirt de 25 € era fardar demais. */}
+            <div className="flex items-center gap-4">
+              <span className="t-ref text-brass">{productRef(product.slug)}</span>
+              <span aria-hidden className="h-px flex-1 bg-rule" />
+              <span className="t-data text-mercury">{category?.name[l]}</span>
             </div>
 
-            <h1 className="t-display mt-7 border-t border-rule pt-7 text-[clamp(2.5rem,6vw,4.5rem)] text-cream">
+            <h1 className="t-display mt-7 text-[clamp(2.8rem,7.5vw,6.5rem)] text-cream">
               {product.name[l]}
             </h1>
             <p className="t-lede mt-4 text-lg text-cream-dim">{product.tagline[l]}</p>

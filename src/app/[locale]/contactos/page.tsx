@@ -62,16 +62,17 @@ export default async function ContactPage({
           vale mais do que o número da porta. Sem fotografia de ambiente. */}
       <Section band="vault" pad="none">
         <div className="pb-14 pt-36 sm:pb-16 sm:pt-44">
-          <RevealText
-            as="h1"
-            text={c.title[l]}
-            className="t-display text-[clamp(3rem,10vw,9rem)] text-cream"
-          />
-          <Reveal effect="rise" index={1}>
-            <p className="t-headline mt-8 max-w-xl border-t border-rule pt-7 text-xl text-brass sm:text-2xl">
-              {SITE.address.landmark[l]}.
-            </p>
+          {/* Nesta página o monumento não é a palavra "Contactos": é a
+              referência que faz alguém chegar lá. */}
+          <Reveal effect="fade">
+            <h1 className="t-data text-mercury">{c.title[l]}</h1>
           </Reveal>
+          <RevealText
+            as="p"
+            startIndex={1}
+            text={`${SITE.address.landmark[l]}.`}
+            className="t-display mt-7 max-w-[16ch] text-[clamp(2.8rem,8.5vw,8rem)] text-cream"
+          />
         </div>
       </Section>
 

@@ -46,7 +46,7 @@ export function Footer({ locale }: { locale: Locale }) {
                   {SITE.address.postal ? `, ${SITE.address.postal}` : ""},{" "}
                   {SITE.address.municipality}
                 </p>
-                <p className="t-body py-3 text-sm text-cream-dim">
+                <p className="t-body py-3 text-sm text-mercury">
                   {SITE.address.landmark[locale]}
                 </p>
                 {/* Só se houver telefone. Não há, à data: um tel: vazio é um

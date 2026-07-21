@@ -118,11 +118,12 @@ const ratio = (a, b) => {
 {
   const ctx = await browser.newContext({ viewport: { width: 1440, height: 900 } });
   const page = await ctx.newPage();
-  await page.goto("http://localhost:3000/pt/loja", { waitUntil: "networkidle" });
-  await page.waitForTimeout(2400);
-  const card = page.locator("article").filter({ hasText: "T-shirt Wordmark" }).first();
-  await card.getByRole("button", { name: "M", exact: true }).click();
-  await card.getByRole("button", { name: /Escolher tamanho|Adicionar/ }).click();
+  // Os cartões da grelha são só foto+nome+preço (decisão de design): a
+  // seleção de tamanho vive na página de produto. O fluxo testa o real.
+  await page.goto("http://localhost:3000/pt/loja/t-shirt-wordmark", { waitUntil: "networkidle" });
+  await page.waitForTimeout(2000);
+  await page.getByRole("button", { name: "M", exact: true }).click();
+  await page.getByRole("button", { name: /Adicionar/ }).click();
   await page.waitForTimeout(500);
   const drawer = page.locator('aside[role="dialog"]');
   check("cart drawer opens on add", await drawer.isVisible());

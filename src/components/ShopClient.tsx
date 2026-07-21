@@ -21,7 +21,7 @@ import { Plate } from "./Wordmark";
 import { ProvisionalStamp } from "./registry/ProvisionalStamp";
 import { Reveal } from "./motion/Reveal";
 import { DICT } from "@/content/dictionary";
-import { CATEGORIES, PRODUCTS, formatPrice, productRef, type Category, type Product } from "@/content/shop";
+import { CATEGORIES, PRODUCTS, productRef, type Category, type Product } from "@/content/shop";
 import type { Locale } from "@/content/site";
 
 /** Referência de arquivo. O catálogo é um registo numerado, não uma montra. */
@@ -163,78 +163,32 @@ function Plating({
    ------------------------------------------------------------------------ */
 
 function Card({ product, locale }: { product: Product; locale: Locale }) {
-  const [size, setSize] = useState<string | null>(null);
-  const { added, commit } = useAdder();
-
-  const needsSize = product.sizes !== null;
-  const blocked = needsSize && size === null;
-
-  const label = added
-    ? DICT.shop.added[locale]
-    : blocked
-      ? DICT.shop.chooseSize[locale]
-      : DICT.shop.addToCart[locale];
-
   return (
-    <article className="group flex w-full flex-col bg-base-2">
-      <Link
-        href={`/${locale}/loja/${product.slug}`}
-        className="block"
-        aria-label={product.name[locale]}
-      >
-        <Plating
-          product={product}
-          locale={locale}
-          plate={64}
-          sizes="(min-width: 1024px) 30vw, (min-width: 640px) 45vw, 92vw"
-          className="aspect-4/5 w-full border-b border-rule"
-        />
-      </Link>
-
-      <div className="flex flex-1 flex-col gap-4 p-5 sm:p-6">
-        <div className="flex items-start justify-between gap-4">
-          <div className="min-w-0">
-            <h3 className="t-headline text-lg text-cream">
-              <Link
-                href={`/${locale}/loja/${product.slug}`}
-                className="transition-colors duration-300 hover:text-brass"
-              >
-                {product.name[locale]}
-              </Link>
-            </h3>
-            <p className="t-body mt-1.5 text-sm text-mercury">{product.tagline[locale]}</p>
-          </div>
-          <p className="t-numeral shrink-0 text-lg text-cream">
-            {formatPrice(product.price, locale)}
-          </p>
-        </div>
-
-        {product.sizes && (
-          <SizePicker
-            sizes={product.sizes}
-            value={size}
-            onSelect={setSize}
-            locale={locale}
-            name={product.name[locale]}
-          />
-        )}
-
-        <button
-          type="button"
-          disabled={blocked}
-          onClick={() => commit(product.slug, size)}
-          className={`t-data mt-auto w-full border px-5 py-3.5 transition-colors duration-300 ${
-            blocked
-              ? "cursor-not-allowed border-rule text-mercury/60"
-              : added
-                ? "border-brass bg-brass text-vault"
-                : "border-rule-strong text-cream hover:border-brass hover:bg-brass hover:text-vault"
-          }`}
-        >
-          {label}
-        </button>
-      </div>
-    </article>
+    <Link
+      href={`/${locale}/loja/${product.slug}`}
+      className="group flex w-full flex-col bg-base-2"
+      aria-label={product.name[locale]}
+    >
+      <Plating
+        product={product}
+        locale={locale}
+        plate={64}
+        sizes="(min-width: 1024px) 30vw, (min-width: 640px) 45vw, 92vw"
+        className="aspect-4/5 w-full border-b border-rule"
+      />
+      <span className="flex items-baseline justify-between gap-4 p-5 sm:p-6">
+        <span className="min-w-0">
+          <span className="t-headline block text-lg text-cream transition-colors duration-300 group-hover:text-brass">
+            {product.name[locale]}
+          </span>
+          <span className="t-body mt-1.5 block text-sm text-mercury">{product.tagline[locale]}</span>
+        </span>
+        <span className="t-display shrink-0 text-2xl text-cream">
+          {product.price}
+          <span className="t-data ml-1 align-super text-mercury">€</span>
+        </span>
+      </span>
+    </Link>
   );
 }
 
@@ -260,7 +214,7 @@ export function ShopClient({ locale }: { locale: Locale }) {
   ];
 
   return (
-    <section className="border-t border-rule bg-base py-16 sm:py-20">
+    <section className="border-t border-rule bg-base py-10 sm:py-12">
       <div className="mx-auto max-w-[92rem] px-5 sm:px-8">
         {/* O h1 vive na página; os cartões são h3. Sem este h2 o índice de
             cabeçalhos saltava um nível e o catálogo ficava sem nome. */}
@@ -305,6 +259,14 @@ export function ShopClient({ locale }: { locale: Locale }) {
               <Card product={p} locale={locale} />
             </Reveal>
           ))}
+          {/* A célula que sobra fecha o documento em vez de ficar caixa vazia. */}
+          <div className="flex min-h-32 items-end border-b border-r border-rule bg-base p-6">
+            <p className="t-data text-mercury/70">
+              {locale === "pt"
+                ? `Fim do catálogo · ${shown.length} artigo${shown.length === 1 ? "" : "s"}`
+                : `End of catalogue · ${shown.length} item${shown.length === 1 ? "" : "s"}`}
+            </p>
+          </div>
         </div>
       </div>
     </section>
