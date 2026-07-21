@@ -51,3 +51,6 @@ next-env.d.ts
 ruvector.db
 agentdb.rvf
 agentdb.rvf.lock
+
+# proposta comercial: fica local, nunca no repositório público
+docs/Proposta*
