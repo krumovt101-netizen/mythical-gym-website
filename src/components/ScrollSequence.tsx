@@ -16,9 +16,11 @@
  *   12 fps lidos diretamente do scroll dão degraus visíveis; com a
  *   perseguição, o filme acelera e assenta como uma cabeça de reprodução
  *   com peso. Quem para de fazer scroll vê o plano assentar, não congelar.
- * - As BORDAS do pin dissolvem: uma cortina cor de vault funde o plano nos
- *   primeiros/últimos 12% de progresso (`edgeFade`), para a secção entrar e
- *   sair como um fade de filme e não como um corte seco no unpin.
+ * - As BORDAS dissolvem na viagem, não no pin: a cortina cor de vault segue
+ *   a posição da secção no viewport (`edgeFade`) — funde do preto enquanto a
+ *   secção desliza para dentro de cena e para o preto enquanto desliza para
+ *   fora. Durante todo o scrub pinado o filme está aceso; o preto acontece
+ *   só onde a secção já está a sair de quadro, nunca em ecrã cheio.
  *
  * Espera fotogramas em `${base}/frame-001.webp` … (zero-padded a 3) e
  * `${base}/poster.webp`. Sem dependências de propósito: nada de GSAP nem
@@ -41,8 +43,9 @@ interface Props {
   /** true nos planos abaixo da dobra: os fotogramas só descarregam quando
       a secção está a menos de um viewport de distância. */
   lazy?: boolean;
-  /** Dissolve nas bordas do pin: "both" nos planos a meio da página,
-      "out" no herói (que não pode acordar tapado), "none" desliga. */
+  /** Dissolve enquanto a secção desliza para dentro/fora do viewport:
+      "both" nos planos a meio da página, "out" no herói (que não pode
+      acordar tapado), "none" desliga. O plano pinado nunca é tapado. */
   edgeFade?: "none" | "out" | "both";
   /** Conteúdo por cima (título, CTA). */
   children?: ReactNode;
@@ -145,23 +148,27 @@ export default function ScrollSequence({
       );
     };
 
-    const progress = () => {
-      const rect = section.getBoundingClientRect();
+    const progress = (rect: DOMRect) => {
       const scrollable = rect.height - window.innerHeight;
       return scrollable > 0
         ? Math.min(1, Math.max(0, -rect.top / scrollable))
         : 0;
     };
 
-    // A cortina de dissolve nas bordas do pin. Opacidade direta no estilo,
-    // fora do React: muda a cada tick e um setState aqui seria um re-render
-    // por fotograma.
-    const updateCurtain = (p: number) => {
+    // A cortina segue a viagem da secção pelo viewport, não o progresso do
+    // pin: opacidade 0 durante todo o scrub, e o dissolve vive na deslocação
+    // despinada — a entrar (rect.top a descer até 0, só em "both": o herói
+    // não pode acordar tapado) e a sair (rect.bottom a subir para 0), com
+    // preto total exatamente quando a secção sai de quadro. Opacidade direta
+    // no estilo, fora do React: muda a cada tick e um setState aqui seria um
+    // re-render por fotograma.
+    const updateCurtain = (rect: DOMRect) => {
       const el = curtainRef.current;
       if (!el) return;
+      const vh = window.innerHeight;
       let o = 0;
-      if (edgeFade === "both") o = Math.max(1 - p / 0.12, (p - 0.88) / 0.12);
-      else if (edgeFade === "out") o = (p - 0.88) / 0.12;
+      if (edgeFade === "both" && rect.top > 0) o = rect.top / vh;
+      else if (rect.bottom < vh) o = 1 - rect.bottom / vh;
       el.style.opacity = String(Math.min(1, Math.max(0, o)));
     };
 
@@ -173,9 +180,9 @@ export default function ScrollSequence({
     const tick = () => {
       raf = 0;
       if (disposed) return;
-      const p = progress();
-      updateCurtain(p);
-      const target = p * (frameCount - 1);
+      const rect = section.getBoundingClientRect();
+      updateCurtain(rect);
+      const target = progress(rect) * (frameCount - 1);
       displayed += (target - displayed) * 0.16;
       if (Math.abs(target - displayed) < 0.04) displayed = target;
       const idx = Math.round(displayed);
@@ -216,7 +223,7 @@ export default function ScrollSequence({
 
     // A cabeça acorda já na posição certa: entrar a meio da página não pode
     // disparar uma perseguição desde o fotograma 1.
-    displayed = progress() * (frameCount - 1);
+    displayed = progress(section.getBoundingClientRect()) * (frameCount - 1);
     current = Math.round(displayed);
 
     load(0).then(async () => {
